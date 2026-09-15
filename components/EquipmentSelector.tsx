@@ -51,8 +51,6 @@ export default function EquipmentSelector({
     });
   }, [catalog, category, query, lang]);
 
-  const selectedCount = Object.keys(selected).length;
-
   return (
     <div>
       <h1 className="text-2xl font-bold text-brand-950 sm:text-3xl">
@@ -152,11 +150,7 @@ export default function EquipmentSelector({
         </div>
       </div>
 
-      <p className="mt-4 text-sm font-medium text-brand-600">
-        {selectedCount} {t.selectedCount}
-      </p>
-
-      <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+      <ul className="mt-4 grid grid-cols-1 gap-2 pb-20 sm:grid-cols-2">
         {filtered.map((item) => {
           const key = itemKey(item);
           const sel = selected[key];

@@ -1,27 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createNotionLead } from "@/lib/notion";
+import { createNotionLead, uploadFileToNotion } from "@/lib/notion";
+
+const MAX_FILE_BYTES = 15 * 1024 * 1024; // 15 MB
 
 export async function POST(req: NextRequest) {
-  let body: unknown;
+  let form: FormData;
   try {
-    body = await req.json();
+    form = await req.formData();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    return NextResponse.json({ error: "Invalid form data" }, { status: 400 });
   }
 
-  const b = body as Record<string, unknown>;
+  const str = (key: string) => {
+    const v = form.get(key);
+    return typeof v === "string" ? v.trim() : "";
+  };
 
-  const name = typeof b.name === "string" ? b.name.trim() : "";
-  const phone = typeof b.phone === "string" ? b.phone.trim() : "";
-  const email = typeof b.email === "string" ? b.email.trim() : "";
-  const lang = b.lang === "en" ? "en" : "es";
-  const mode = b.mode;
-  const dailyWhTotal = typeof b.dailyWhTotal === "number" ? b.dailyWhTotal : 0;
-  const panelCount = typeof b.panelCount === "number" ? b.panelCount : 0;
-  const batteryCount =
-    typeof b.batteryCount === "number" ? b.batteryCount : null;
-  const inverterKW = typeof b.inverterKW === "number" ? b.inverterKW : null;
-  const notes = typeof b.notes === "string" ? b.notes : undefined;
+  const name = str("name");
+  const phone = str("phone");
+  const email = str("email");
+  const lang = form.get("lang") === "en" ? "en" : "es";
+  const mode = str("mode");
+  const intakeMode = str("intakeMode") === "cfe" ? "cfe" : "equipment";
+  const notes = str("notes") || undefined;
 
   if (!name || !phone || !email) {
     return NextResponse.json(
@@ -36,8 +37,42 @@ export async function POST(req: NextRequest) {
     "respaldo-parcial",
     "sin-respaldo",
   ];
-  if (typeof mode !== "string" || !validModes.includes(mode)) {
+  if (!validModes.includes(mode)) {
     return NextResponse.json({ error: "Modo de sistema inválido." }, { status: 400 });
+  }
+
+  let dailyWhTotal: number | undefined;
+  let panelCount: number | undefined;
+  let batteryCount: number | null | undefined;
+  let inverterKW: number | null | undefined;
+
+  if (intakeMode === "equipment") {
+    dailyWhTotal = Number(str("dailyWhTotal")) || 0;
+    panelCount = Number(str("panelCount")) || 0;
+    const batteryRaw = str("batteryCount");
+    batteryCount = batteryRaw ? Number(batteryRaw) : null;
+    const inverterRaw = str("inverterKW");
+    inverterKW = inverterRaw ? Number(inverterRaw) : null;
+  }
+
+  let fileUploadId: string | undefined;
+  const file = form.get("receipt");
+  if (file instanceof File && file.size > 0) {
+    if (file.size > MAX_FILE_BYTES) {
+      return NextResponse.json(
+        { error: "El archivo es demasiado grande (máx. 15 MB)." },
+        { status: 400 }
+      );
+    }
+    try {
+      fileUploadId = await uploadFileToNotion(file);
+    } catch (err) {
+      console.error("Failed to upload file to Notion:", err);
+      return NextResponse.json(
+        { error: "No se pudo subir el archivo." },
+        { status: 502 }
+      );
+    }
   }
 
   try {
@@ -56,6 +91,7 @@ export async function POST(req: NextRequest) {
       batteryCount,
       inverterKW,
       notes,
+      fileUploadId,
     });
     return NextResponse.json({ ok: true });
   } catch (err) {

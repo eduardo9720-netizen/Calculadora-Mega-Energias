@@ -67,6 +67,15 @@ export interface Dict {
   inverterXLarge: string;
   inverterTBD: string;
   rangeDisclaimer: string;
+  intakeEquipmentTab: string;
+  intakeCfeTab: string;
+  cfeTitle: string;
+  cfeSub: string;
+  cfeDropHint: string;
+  cfeRemove: string;
+  step3TitleCfe: string;
+  step3SubCfe: string;
+  submitSuccessCfe: string;
 }
 
 export const dict: Record<Lang, Dict> = {
@@ -131,6 +140,18 @@ export const dict: Record<Lang, Dict> = {
     inverterXLarge: "Sistema Victron de múltiples unidades en paralelo",
     inverterTBD: "Modelo de inversor a confirmar por tu asesor",
     rangeDisclaimer: "Rangos de referencia. Tu asesor confirmará el detalle exacto.",
+    intakeEquipmentTab: "Seleccionar equipos",
+    intakeCfeTab: "Subir mi recibo CFE",
+    cfeTitle: "Sube tu recibo CFE",
+    cfeSub:
+      "Súbelo y salta directo a dejarnos tus datos — un asesor calculará tu sistema recomendado a partir de tu consumo real.",
+    cfeDropHint: "Toca para elegir una foto o PDF de tu recibo",
+    cfeRemove: "Quitar archivo",
+    step3TitleCfe: "¡Ya casi!",
+    step3SubCfe:
+      "Compártenos tus datos y nos contactamos contigo con tu sistema acomodado a tus necesidades y recomendaciones.",
+    submitSuccessCfe:
+      "¡Listo! Recibimos tu recibo CFE. Un asesor lo revisará y te contactará pronto.",
   },
   en: {
     appName: "Mega Energías Calculator",
@@ -193,6 +214,18 @@ export const dict: Record<Lang, Dict> = {
     inverterXLarge: "Victron multi-unit parallel system",
     inverterTBD: "Inverter model to be confirmed by your advisor",
     rangeDisclaimer: "Reference ranges only. Your advisor will confirm the exact details.",
+    intakeEquipmentTab: "Select equipment",
+    intakeCfeTab: "Upload my utility bill",
+    cfeTitle: "Upload your utility bill",
+    cfeSub:
+      "Upload it and skip straight to leaving your details — an advisor will size your recommended system from your actual usage.",
+    cfeDropHint: "Tap to choose a photo or PDF of your bill",
+    cfeRemove: "Remove file",
+    step3TitleCfe: "Almost there!",
+    step3SubCfe:
+      "Share your details and we'll get in touch with your system tailored to your needs and recommendations.",
+    submitSuccessCfe:
+      "Done! We received your utility bill. An advisor will review it and contact you soon.",
   },
 };
 

@@ -19,7 +19,7 @@ export default function ResultsView({ result }: Props) {
       <p className="mt-2 max-w-2xl text-brand-700">{t.step3Sub}</p>
 
       <div className="mt-8">
-        <LeadForm result={result} />
+        <LeadForm mode={result.mode} result={result} />
       </div>
     </div>
   );

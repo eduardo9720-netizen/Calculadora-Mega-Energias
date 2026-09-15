@@ -92,8 +92,11 @@ export const PACKAGES: EquipmentPackage[] = [
   },
   {
     id: "rancho",
-    title: { es: "Rancho / exterior", en: "Ranch / rural" },
-    subtitle: { es: "Bombeo de agua y riego", en: "Water pumping & irrigation" },
+    title: { es: "Rancho / terreno rural", en: "Ranch / rural land" },
+    subtitle: {
+      es: "Para propiedades sin agua de ciudad: bombeo de pozo propio y riego",
+      en: "For properties without city water: well pumping and irrigation",
+    },
     items: [
       { catId: "refrig", name: "Refrigerador", brand: "Mabe", spec: "11 pies, cíclico", quantity: 1, essential: true },
       { catId: "agua", name: "Bomba de agua", brand: "Evans", spec: "1 HP", quantity: 1, essential: true },
@@ -131,14 +134,6 @@ export const ADDONS: EquipmentPackage[] = [
     subtitle: { es: "Bomba + calentador", en: "Pump + heater" },
     items: [
       { catId: "agua", name: "Jacuzzi / spa exterior", brand: "Genérico", spec: "bomba + calentador", quantity: 1 },
-    ],
-  },
-  {
-    id: "starlink",
-    title: { es: "Internet satelital", en: "Satellite internet" },
-    subtitle: { es: "Starlink", en: "Starlink" },
-    items: [
-      { catId: "entret", name: "Internet satelital", brand: "Starlink", spec: "Standard (antena + router)", quantity: 1, essential: true },
     ],
   },
   {

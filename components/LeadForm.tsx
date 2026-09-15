@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import type { CalculationResult } from "@/lib/types";
+import type { CalculationResult, SystemMode } from "@/lib/types";
 import { toPublicRange } from "@/lib/calculations";
 import { useI18n } from "@/lib/i18n-context";
 
 interface Props {
-  result: CalculationResult;
+  mode: SystemMode;
+  result: CalculationResult | null; // null when the lead came from a CFE receipt upload
+  cfeFile?: File | null;
 }
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -21,7 +23,7 @@ function InverterCategoryLabel({ result }: { result: CalculationResult }) {
   return <>{t.inverterXLarge}</>;
 }
 
-export default function LeadForm({ result }: Props) {
+export default function LeadForm({ mode, result, cfeFile }: Props) {
   const { t, lang } = useI18n();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -33,26 +35,31 @@ export default function LeadForm({ result }: Props) {
     e.preventDefault();
     setStatus("submitting");
     try {
-      const inverterKW = result.inverterParallelUnits
-        ? (result.inverterSize?.kva ?? 0) * result.inverterParallelUnits
-        : result.inverterSize?.kva ?? result.gridTieEstimatedKW ?? null;
+      const fd = new FormData();
+      fd.append("name", name);
+      fd.append("phone", phone);
+      fd.append("email", email);
+      if (notes) fd.append("notes", notes);
+      fd.append("lang", lang);
+      fd.append("mode", mode);
 
-      const res = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          phone,
-          email,
-          notes: notes || undefined,
-          lang,
-          mode: result.mode,
-          dailyWhTotal: result.dailyWhTotal,
-          panelCount: result.panelCount,
-          batteryCount: result.batteryCount,
-          inverterKW,
-        }),
-      });
+      if (result) {
+        fd.append("intakeMode", "equipment");
+        fd.append("dailyWhTotal", String(result.dailyWhTotal));
+        fd.append("panelCount", String(result.panelCount));
+        if (result.batteryCount !== null) {
+          fd.append("batteryCount", String(result.batteryCount));
+        }
+        const inverterKW = result.inverterParallelUnits
+          ? (result.inverterSize?.kva ?? 0) * result.inverterParallelUnits
+          : result.inverterSize?.kva ?? result.gridTieEstimatedKW ?? null;
+        if (inverterKW !== null) fd.append("inverterKW", String(inverterKW));
+      } else {
+        fd.append("intakeMode", "cfe");
+        if (cfeFile) fd.append("receipt", cfeFile, cfeFile.name);
+      }
+
+      const res = await fetch("/api/leads", { method: "POST", body: fd });
       if (!res.ok) throw new Error("request failed");
       setStatus("success");
     } catch {
@@ -61,9 +68,16 @@ export default function LeadForm({ result }: Props) {
   }
 
   if (status === "success") {
+    if (!result) {
+      return (
+        <div className="rounded-lg border border-brand-300 bg-brand-50 p-6 text-brand-800">
+          <p className="font-semibold">{t.submitSuccessCfe}</p>
+        </div>
+      );
+    }
     const range = toPublicRange(result);
     return (
-      <div className="rounded-xl border border-brand-300 bg-brand-50 p-6 text-brand-800">
+      <div className="rounded-lg border border-brand-300 bg-brand-50 p-6 text-brand-800">
         <p className="font-semibold">{t.submitSuccess}</p>
         <div className="mt-4 rounded-lg border border-brand-200 bg-white p-4">
           <p className="text-sm font-medium text-brand-600">{t.rangeIntro}</p>
@@ -92,7 +106,7 @@ export default function LeadForm({ result }: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-xl border border-brand-100 bg-white p-5"
+      className="rounded-lg border border-brand-100 bg-white p-5"
     >
       <h2 className="text-lg font-semibold text-brand-950">
         {t.leadFormTitle}
