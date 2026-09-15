@@ -29,6 +29,7 @@ export default function EquipmentSelector({
   const { t, lang } = useI18n();
   const [category, setCategory] = useState<string>("all");
   const [query, setQuery] = useState("");
+  const [browseOpen, setBrowseOpen] = useState(false);
 
   const categories = useMemo(
     () => Array.from(new Set(catalog.map((c) => c.catId))).sort(),
@@ -110,81 +111,92 @@ export default function EquipmentSelector({
         </div>
       </div>
 
-      <p className="mt-6 text-sm text-brand-500">{t.searchHint}</p>
-      <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={t.searchPlaceholder}
-          className="w-full rounded-md border border-brand-200 bg-white px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none sm:max-w-xs"
-        />
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => setCategory("all")}
-            className={`rounded-md border px-3 py-1.5 text-sm font-medium transition ${
-              category === "all"
-                ? "border-brand-600 bg-brand-600 text-white"
-                : "border-brand-200 bg-white text-brand-700 hover:border-brand-300"
-            }`}
-          >
-            {t.allCategories}
-          </button>
-          {categories.map((c) => (
-            <button
-              key={c}
-              type="button"
-              onClick={() => setCategory(c)}
-              className={`rounded-md border px-3 py-1.5 text-sm font-medium transition ${
-                category === c
-                  ? "border-brand-600 bg-brand-600 text-white"
-                  : "border-brand-200 bg-white text-brand-700 hover:border-brand-300"
-              }`}
-            >
-              {CATEGORY_LABELS[c]?.[lang] ?? c}
-            </button>
-          ))}
-        </div>
-      </div>
+      <button
+        type="button"
+        onClick={() => setBrowseOpen((o) => !o)}
+        className="mt-6 text-sm font-medium text-brand-600 underline underline-offset-2"
+      >
+        {browseOpen ? t.browseHide : t.searchHint}
+      </button>
 
-      <ul className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-        {filtered.map((item) => {
-          const key = itemKey(item);
-          const sel = selected[key];
-          const isSelected = !!sel;
-          const name = lang === "es" ? item.name : item.nameEn;
-          const spec = lang === "es" ? item.spec : item.specEn;
-          return (
-            <li
-              key={key}
-              className={`rounded-lg border bg-white p-4 transition ${
-                isSelected ? "border-brand-600" : "border-brand-100"
-              }`}
-            >
-              <label className="flex cursor-pointer items-start gap-3">
-                <input
-                  type="checkbox"
-                  checked={isSelected}
-                  onChange={() => onToggle(item)}
-                  className="mt-1 h-4 w-4 rounded border-brand-300 text-brand-600 focus:ring-brand-500"
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-baseline justify-between gap-2">
-                    <span className="font-semibold text-brand-950">{name}</span>
-                    <span className="whitespace-nowrap text-xs text-brand-500">
-                      {item.watts} W
-                    </span>
-                  </div>
-                  <div className="text-sm text-brand-600">
-                    {item.brand} — {spec}
-                  </div>
-                </div>
-              </label>
-            </li>
-          );
-        })}
-      </ul>
+      {browseOpen && (
+        <>
+          <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={t.searchPlaceholder}
+              className="w-full rounded-md border border-brand-200 bg-white px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none sm:max-w-xs"
+            />
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setCategory("all")}
+                className={`rounded-md border px-3 py-1.5 text-sm font-medium transition ${
+                  category === "all"
+                    ? "border-brand-600 bg-brand-600 text-white"
+                    : "border-brand-200 bg-white text-brand-700 hover:border-brand-300"
+                }`}
+              >
+                {t.allCategories}
+              </button>
+              {categories.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setCategory(c)}
+                  className={`rounded-md border px-3 py-1.5 text-sm font-medium transition ${
+                    category === c
+                      ? "border-brand-600 bg-brand-600 text-white"
+                      : "border-brand-200 bg-white text-brand-700 hover:border-brand-300"
+                  }`}
+                >
+                  {CATEGORY_LABELS[c]?.[lang] ?? c}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <ul className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {filtered.map((item) => {
+              const key = itemKey(item);
+              const sel = selected[key];
+              const isSelected = !!sel;
+              const name = lang === "es" ? item.name : item.nameEn;
+              const spec = lang === "es" ? item.spec : item.specEn;
+              return (
+                <li
+                  key={key}
+                  className={`rounded-lg border bg-white p-4 transition ${
+                    isSelected ? "border-brand-600" : "border-brand-100"
+                  }`}
+                >
+                  <label className="flex cursor-pointer items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => onToggle(item)}
+                      className="mt-1 h-4 w-4 rounded border-brand-300 text-brand-600 focus:ring-brand-500"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-baseline justify-between gap-2">
+                        <span className="font-semibold text-brand-950">{name}</span>
+                        <span className="whitespace-nowrap text-xs text-brand-500">
+                          {item.watts} W
+                        </span>
+                      </div>
+                      <div className="text-sm text-brand-600">
+                        {item.brand} — {spec}
+                      </div>
+                    </div>
+                  </label>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      )}
     </div>
   );
 }

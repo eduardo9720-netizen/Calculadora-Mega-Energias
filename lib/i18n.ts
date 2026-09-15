@@ -56,6 +56,7 @@ export interface Dict {
   packagesHint: string;
   addonsTitle: string;
   searchHint: string;
+  browseHide: string;
   rangeIntro: string;
   rangePanels: (min: number, max: number) => string;
   rangeBatteries: (min: number, max: number) => string;
@@ -128,7 +129,8 @@ export const dict: Record<Lang, Dict> = {
     packagesTitle: "Empieza con un paquete",
     packagesHint: "Elige el que más se parezca a tu casa o negocio y ajusta lo que necesites.",
     addonsTitle: "Extras",
-    searchHint: "¿No encuentras algo? Búscalo abajo.",
+    searchHint: "Buscar un equipo específico",
+    browseHide: "Ocultar lista de equipos",
     rangeIntro: "Como referencia, tu sistema estimado:",
     rangePanels: (min, max) => `${min}–${max} paneles solares`,
     rangeBatteries: (min, max) => `${min}–${max} baterías de litio`,
@@ -202,7 +204,8 @@ export const dict: Record<Lang, Dict> = {
     packagesTitle: "Start with a package",
     packagesHint: "Pick the one closest to your home or business and adjust as needed.",
     addonsTitle: "Extras",
-    searchHint: "Can't find something? Search below.",
+    searchHint: "Search for specific equipment",
+    browseHide: "Hide equipment list",
     rangeIntro: "As a reference, your estimated system:",
     rangePanels: (min, max) => `${min}–${max} solar panels`,
     rangeBatteries: (min, max) => `${min}–${max} lithium batteries`,
