@@ -54,6 +54,9 @@ export interface Dict {
   perDay: string;
   packagesTitle: string;
   packagesHint: string;
+  otherPackagesTitle: string;
+  otherPackagesHint: string;
+  skipPackage: string;
   addonsTitle: string;
   searchHint: string;
   browseHide: string;
@@ -144,6 +147,9 @@ export const dict: Record<Lang, Dict> = {
     perDay: "/día",
     packagesTitle: "Empieza con un paquete",
     packagesHint: "Elige el que más se parezca a tu casa o negocio y ajusta lo que necesites.",
+    otherPackagesTitle: "Otras opciones",
+    otherPackagesHint: "Negocio, rancho o arma tu sistema desde cero",
+    skipPackage: "Arma tu sistema solar",
     addonsTitle: "Extras",
     searchHint: "Buscar un equipo específico",
     browseHide: "Ocultar lista de equipos",
@@ -240,6 +246,9 @@ export const dict: Record<Lang, Dict> = {
     perDay: "/day",
     packagesTitle: "Start with a package",
     packagesHint: "Pick the one closest to your home or business and adjust as needed.",
+    otherPackagesTitle: "Other options",
+    otherPackagesHint: "Business, ranch, or build your system from scratch",
+    skipPackage: "Build your solar system",
     addonsTitle: "Extras",
     searchHint: "Search for specific equipment",
     browseHide: "Hide equipment list",

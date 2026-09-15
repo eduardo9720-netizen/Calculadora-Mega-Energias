@@ -11,11 +11,15 @@ export interface CatalogItem {
 }
 
 export interface SelectedItem {
-  key: string; // `${catId}::${name}::${brand}::${spec}`
+  key: string; // `${catId}::${name}::${brand}::${spec}`, or `pkg::${packageId}::${index}::${equipmentId}`
   item: CatalogItem;
   quantity: number;
   hours: number;
   essential: boolean;
+  // "package" rows are the current default package's base load — replaced
+  // wholesale when the user picks a different package. Manually added rows
+  // (browsed equipment, add-ons) are left undefined and always preserved.
+  source?: "package";
 }
 
 export type SystemMode =

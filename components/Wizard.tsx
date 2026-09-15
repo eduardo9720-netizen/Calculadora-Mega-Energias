@@ -8,7 +8,8 @@ import type {
   SystemMode,
 } from "@/lib/types";
 import { calculate, itemKey, DEFAULT_AUTONOMY_DAYS, DEFAULT_KWH_PER_BATTERY } from "@/lib/calculations";
-import { resolvePackageItems, type EquipmentPackage } from "@/lib/packages";
+import { resolvePackageItems, resolveDefaultPackageItems, type EquipmentPackage } from "@/lib/packages";
+import type { DefaultPackage } from "@/lib/megaDefaults";
 import { useI18n } from "@/lib/i18n-context";
 import LanguageToggle from "./LanguageToggle";
 import Logo from "./Logo";
@@ -88,13 +89,26 @@ export default function Wizard({ catalog, loadError }: Props) {
     });
   }
 
-  function applyPackage(pkg: EquipmentPackage) {
-    const items = resolvePackageItems(pkg, catalog);
-    const next: Record<string, SelectedItem> = {};
-    for (const s of items) next[s.key] = s;
-    setSelected(next);
+  // Switching packages replaces only the previous package's base rows —
+  // anything the user added manually (browsed equipment, add-ons) stays.
+  function applyDefaultPackage(pkg: DefaultPackage) {
+    const items = resolveDefaultPackageItems(pkg);
+    setSelected((prev) => {
+      const preserved = Object.fromEntries(
+        Object.entries(prev).filter(([, s]) => s.source !== "package")
+      );
+      const next = { ...preserved };
+      for (const s of items) next[s.key] = s;
+      return next;
+    });
     setActivePackageId(pkg.id);
-    setActiveAddOnIds(new Set());
+  }
+
+  function skipToManualEquipment() {
+    setSelected((prev) =>
+      Object.fromEntries(Object.entries(prev).filter(([, s]) => s.source !== "package"))
+    );
+    setActivePackageId(null);
   }
 
   function toggleAddOn(addon: EquipmentPackage) {
@@ -202,7 +216,8 @@ export default function Wizard({ catalog, loadError }: Props) {
                   onToggle={toggleItem}
                   activePackageId={activePackageId}
                   activeAddOnIds={activeAddOnIds}
-                  onApplyPackage={applyPackage}
+                  onApplyPackage={applyDefaultPackage}
+                  onSkipPackage={skipToManualEquipment}
                   onToggleAddOn={toggleAddOn}
                 />
               )}

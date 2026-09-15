@@ -1,5 +1,6 @@
 import type { CatalogItem, SelectedItem } from "./types";
 import { itemKey } from "./calculations";
+import { findGenericEquipment, type DefaultPackage } from "./megaDefaults";
 
 export interface PackageItemRef {
   catId: string;
@@ -17,65 +18,6 @@ export interface EquipmentPackage {
   subtitle: { es: string; en: string };
   items: PackageItemRef[];
 }
-
-// Starter bundles — pre-fill common home/business profiles from the current
-// catalog. Users can still add, remove, or edit anything after applying one.
-export const PACKAGES: EquipmentPackage[] = [
-  {
-    id: "depa-chico",
-    title: { es: "Depa / casa chica", en: "Apartment / small home" },
-    subtitle: { es: "1-2 recámaras, bien equipado", en: "1-2 bedrooms, fully equipped" },
-    items: [
-      { catId: "refrig", name: "Refrigerador", brand: "Whirlpool", spec: "18 pies, top freezer", quantity: 1, essential: true },
-      { catId: "clima", name: "Minisplit", brand: "York", spec: "1 ton / 12,000 BTU, Inverter", quantity: 1 },
-      { catId: "entret", name: "TV LED", brand: "Samsung/LG", spec: "43\"", quantity: 1 },
-      { catId: "entret", name: "Router / módem", brand: "Genérico", spec: "WiFi", quantity: 1, essential: true },
-      { catId: "entret", name: "Laptop", brand: "Genérico", spec: "cargador", quantity: 1 },
-      { catId: "entret", name: "Consola de videojuegos", brand: "PlayStation/Xbox", spec: "estándar", quantity: 1 },
-      { catId: "lavado", name: "Lavadora", brand: "LG", spec: "carga 20 kg, Inverter", quantity: 1 },
-      { catId: "cocina", name: "Microondas", brand: "Samsung", spec: "1.1 pies", quantity: 1 },
-      { catId: "cocina", name: "Cafetera", brand: "Oster", spec: "12 tazas", quantity: 1 },
-      { catId: "cocina", name: "Licuadora", brand: "Oster", spec: "estándar", quantity: 1 },
-      { catId: "personal", name: "Secadora de cabello", brand: "Genérico", spec: "estándar", quantity: 1 },
-      { catId: "seguridad", name: "Timbre inteligente", brand: "Ring", spec: "estándar", quantity: 1 },
-      { catId: "iluminacion", name: "Foco LED", brand: "Genérico", spec: "estándar 9W", quantity: 8 },
-      { catId: "iluminacion", name: "Cargadores varios", brand: "Genérico", spec: "celulares / bocinas", quantity: 1 },
-    ],
-  },
-  {
-    id: "casa-3-recamaras",
-    title: { es: "Casa 3 recámaras", en: "3-bedroom house" },
-    subtitle: { es: "3 aires, 2 tele, 1 refrigerador", en: "3 AC units, 2 TVs, 1 fridge" },
-    items: [
-      { catId: "refrig", name: "Refrigerador", brand: "Samsung", spec: "28 pies Side by Side", quantity: 1, essential: true },
-      { catId: "clima", name: "Minisplit", brand: "York", spec: "1.5 ton / 18,000 BTU, Inverter", quantity: 2 },
-      { catId: "clima", name: "Minisplit", brand: "York", spec: "1 ton / 12,000 BTU, Inverter", quantity: 1 },
-      { catId: "entret", name: "TV LED", brand: "Samsung/LG", spec: "43\"", quantity: 2 },
-      { catId: "lavado", name: "Lavadora", brand: "LG", spec: "carga 20 kg, Inverter", quantity: 1 },
-      { catId: "entret", name: "Router / módem", brand: "Genérico", spec: "WiFi", quantity: 1, essential: true },
-      { catId: "iluminacion", name: "Foco LED", brand: "Genérico", spec: "estándar 9W", quantity: 10 },
-      { catId: "iluminacion", name: "Cargadores varios", brand: "Genérico", spec: "celulares / bocinas", quantity: 1 },
-    ],
-  },
-  {
-    id: "casa-grande",
-    title: { es: "Casa grande", en: "Large house" },
-    subtitle: { es: "4+ recámaras, cocina equipada", en: "4+ bedrooms, full kitchen" },
-    items: [
-      { catId: "refrig", name: "Refrigerador", brand: "LG", spec: "22 pies French Door, Inverter", quantity: 1, essential: true },
-      { catId: "clima", name: "Minisplit", brand: "York", spec: "1.5 ton / 18,000 BTU, Inverter", quantity: 3 },
-      { catId: "clima", name: "Minisplit", brand: "York", spec: "2 ton / 24,000 BTU, Inverter", quantity: 1 },
-      { catId: "entret", name: "TV LED", brand: "Samsung/LG", spec: "43\"", quantity: 2 },
-      { catId: "entret", name: "TV QLED", brand: "Samsung", spec: "55\"", quantity: 1 },
-      { catId: "lavado", name: "Lavadora", brand: "LG", spec: "carga 20 kg, Inverter", quantity: 1 },
-      { catId: "lavado", name: "Lavavajillas", brand: "Mabe", spec: "estándar", quantity: 1 },
-      { catId: "cocina", name: "Horno eléctrico empotrado", brand: "Mabe", spec: "24\"", quantity: 1 },
-      { catId: "entret", name: "Router / módem", brand: "Genérico", spec: "WiFi", quantity: 1, essential: true },
-      { catId: "iluminacion", name: "Foco LED", brand: "Genérico", spec: "estándar 9W", quantity: 16 },
-      { catId: "iluminacion", name: "Cargadores varios", brand: "Genérico", spec: "celulares / bocinas", quantity: 1 },
-    ],
-  },
-];
 
 // Add-ons layer extra equipment on top of whatever is already selected
 // (from a package or built manually) — they don't replace the selection.
@@ -115,6 +57,39 @@ export const ADDONS: EquipmentPackage[] = [
     ],
   },
 ];
+
+// Each entry in equiposIncluidos becomes its own independent row — even
+// repeated ids (e.g. two "minisplit_12000btu") render as two separate rows,
+// never merged into a quantity. Midpoint of watts_min/watts_max is used as
+// the point-estimate wattage; horas_dia_default as the starting hours/day —
+// both stay user-editable per row afterward.
+export function resolveDefaultPackageItems(pkg: DefaultPackage): SelectedItem[] {
+  const result: SelectedItem[] = [];
+  pkg.equiposIncluidos.forEach((equipoId, index) => {
+    const eq = findGenericEquipment(equipoId);
+    if (!eq) return; // reference data out of sync; skip rather than crash
+    const watts = Math.round((eq.wattsMin + eq.wattsMax) / 2);
+    const item: CatalogItem = {
+      catId: eq.categoria,
+      name: eq.nombre,
+      nameEn: eq.nombreEn,
+      brand: "",
+      spec: "",
+      specEn: "",
+      watts,
+      hours: eq.horasDiaDefault,
+    };
+    result.push({
+      key: `pkg::${pkg.id}::${index}::${equipoId}`,
+      item,
+      quantity: 1,
+      hours: eq.horasDiaDefault,
+      essential: !!eq.esCargaCritica,
+      source: "package",
+    });
+  });
+  return result;
+}
 
 export function resolvePackageItems(
   pkg: EquipmentPackage,

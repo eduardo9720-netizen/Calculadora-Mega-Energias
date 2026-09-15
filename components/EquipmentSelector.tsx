@@ -5,7 +5,18 @@ import type { CatalogItem, SelectedItem } from "@/lib/types";
 import { itemKey } from "@/lib/calculations";
 import { CATEGORY_LABELS } from "@/lib/i18n";
 import { useI18n } from "@/lib/i18n-context";
-import { PACKAGES, ADDONS, type EquipmentPackage } from "@/lib/packages";
+import { ADDONS, type EquipmentPackage } from "@/lib/packages";
+import {
+  PAQUETES_RESIDENCIALES,
+  PAQUETES_COMERCIALES,
+  type DefaultPackage,
+} from "@/lib/megaDefaults";
+
+const MAIN_PACKAGES = PAQUETES_RESIDENCIALES.filter((p) => p.id !== "rancho_terreno_rural");
+const OTHER_PACKAGES = [
+  ...PAQUETES_COMERCIALES,
+  ...PAQUETES_RESIDENCIALES.filter((p) => p.id === "rancho_terreno_rural"),
+];
 
 interface Props {
   catalog: CatalogItem[];
@@ -13,7 +24,8 @@ interface Props {
   onToggle: (item: CatalogItem) => void;
   activePackageId: string | null;
   activeAddOnIds: Set<string>;
-  onApplyPackage: (pkg: EquipmentPackage) => void;
+  onApplyPackage: (pkg: DefaultPackage) => void;
+  onSkipPackage: () => void;
   onToggleAddOn: (addon: EquipmentPackage) => void;
 }
 
@@ -24,9 +36,11 @@ export default function EquipmentSelector({
   activePackageId,
   activeAddOnIds,
   onApplyPackage,
+  onSkipPackage,
   onToggleAddOn,
 }: Props) {
   const { t, lang } = useI18n();
+  const [otherOpen, setOtherOpen] = useState(false);
   const [category, setCategory] = useState<string>("all");
   const [query, setQuery] = useState("");
   const [browseOpen, setBrowseOpen] = useState(false);
@@ -62,9 +76,11 @@ export default function EquipmentSelector({
           {t.packagesTitle}
         </h2>
         <p className="mt-1 text-sm text-brand-600">{t.packagesHint}</p>
-        <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
-          {PACKAGES.map((pkg) => {
+        <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {MAIN_PACKAGES.map((pkg) => {
             const isActive = activePackageId === pkg.id;
+            const nombre = lang === "es" ? pkg.nombre : pkg.nombreEn;
+            const descripcion = lang === "es" ? pkg.descripcion : pkg.descripcionEn;
             return (
               <button
                 key={pkg.id}
@@ -76,16 +92,66 @@ export default function EquipmentSelector({
                     : "border-brand-100 bg-white hover:border-brand-300"
                 }`}
               >
-                <div className="text-sm font-semibold text-brand-950">
-                  {pkg.title[lang]}
-                </div>
-                <div className="mt-0.5 text-xs text-brand-500">
-                  {pkg.subtitle[lang]}
-                </div>
+                <div className="text-sm font-semibold text-brand-950">{nombre}</div>
+                <div className="mt-0.5 text-xs text-brand-500">{descripcion}</div>
               </button>
             );
           })}
+          <button
+            type="button"
+            onClick={() => setOtherOpen((o) => !o)}
+            className={`rounded-lg border p-3 text-left transition ${
+              otherOpen
+                ? "border-brand-600 bg-white"
+                : "border-brand-100 bg-white hover:border-brand-300"
+            }`}
+          >
+            <div className="text-sm font-semibold text-brand-950">
+              {t.otherPackagesTitle}
+            </div>
+            <div className="mt-0.5 text-xs text-brand-500">{t.otherPackagesHint}</div>
+          </button>
         </div>
+
+        {otherOpen && (
+          <div className="mt-2 rounded-lg border border-brand-100 bg-brand-50 p-3">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {OTHER_PACKAGES.map((pkg) => {
+                const isActive = activePackageId === pkg.id;
+                const nombre = lang === "es" ? pkg.nombre : pkg.nombreEn;
+                const descripcion = lang === "es" ? pkg.descripcion : pkg.descripcionEn;
+                return (
+                  <button
+                    key={pkg.id}
+                    type="button"
+                    onClick={() => {
+                      onApplyPackage(pkg);
+                      setOtherOpen(false);
+                    }}
+                    className={`rounded-lg border p-3 text-left transition ${
+                      isActive
+                        ? "border-brand-600 bg-white"
+                        : "border-brand-200 bg-white hover:border-brand-300"
+                    }`}
+                  >
+                    <div className="text-sm font-semibold text-brand-950">{nombre}</div>
+                    <div className="mt-0.5 text-xs text-brand-500">{descripcion}</div>
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                onSkipPackage();
+                setOtherOpen(false);
+              }}
+              className="mt-3 text-sm font-medium text-brand-600 underline underline-offset-2"
+            >
+              {t.skipPackage}
+            </button>
+          </div>
+        )}
 
         <h2 className="mt-5 text-sm font-semibold uppercase tracking-wide text-brand-600">
           {t.addonsTitle}
