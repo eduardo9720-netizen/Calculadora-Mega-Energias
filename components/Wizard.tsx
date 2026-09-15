@@ -11,6 +11,7 @@ import { calculate, itemKey, DEFAULT_AUTONOMY_DAYS, DEFAULT_KWH_PER_BATTERY } fr
 import { resolvePackageItems, type EquipmentPackage } from "@/lib/packages";
 import { useI18n } from "@/lib/i18n-context";
 import LanguageToggle from "./LanguageToggle";
+import Logo from "./Logo";
 import ProgressSteps from "./ProgressSteps";
 import EquipmentSelector from "./EquipmentSelector";
 import SystemTypeSelector from "./SystemTypeSelector";
@@ -155,9 +156,10 @@ export default function Wizard({ catalog, loadError }: Props) {
     <main className="mx-auto min-h-screen max-w-4xl px-4 pb-24 pt-8 sm:px-6 sm:pt-12">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-brand-600">
+          <Logo />
+          <p className="mt-1 text-[11px] font-semibold uppercase tracking-wide text-accent-700">
             {t.appName}
-          </h2>
+          </p>
         </div>
         <LanguageToggle />
       </div>
