@@ -97,7 +97,7 @@ export interface Dict {
 export const dict: Record<Lang, Dict> = {
   es: {
     appName: "Planificador de Proyecto Solar",
-    step1Title: "¿Dónde ocupas energía?",
+    step1Title: "¿Para qué necesitas energía?",
     step1Sub:
       "Elige los espacios y equipos de tu casa o negocio. Marca \"esencial\" si debe seguir funcionando en un apagón.",
     searchPlaceholder: "Buscar equipo...",
@@ -191,7 +191,7 @@ export const dict: Record<Lang, Dict> = {
   },
   en: {
     appName: "Solar Project Planner",
-    step1Title: "Where do you use energy?",
+    step1Title: "What do you need energy for?",
     step1Sub:
       "Pick the spaces and equipment in your home or business. Mark \"essential\" if it must keep running during an outage.",
     searchPlaceholder: "Search equipment...",
