@@ -4,7 +4,6 @@ import { useState, type FormEvent } from "react";
 import type { CalculationResult, ManualConfig, SystemMode } from "@/lib/types";
 import { exceedsDacThreshold, toPublicRange } from "@/lib/calculations";
 import { useI18n } from "@/lib/i18n-context";
-import SystemFlowDiagram, { manualKvaToFlowSize } from "./SystemFlowDiagram";
 
 interface Props {
   mode: SystemMode;
@@ -91,17 +90,6 @@ export default function LeadForm({ mode, result, cfeFile, manualConfig }: Props)
               <li>{t.manualSummaryInverter(`${manualConfig.inverterKva} kVA`)}</li>
             </ul>
           </div>
-          <div className="mt-4 rounded-lg border border-brand-200 bg-white p-4">
-            <p className="text-sm font-medium text-brand-600">{t.systemDiagramTitle}</p>
-            <div className="mt-2">
-              <SystemFlowDiagram
-                panelCount={manualConfig.panelCount}
-                hasBattery={manualConfig.batteryCount > 0}
-                batteryCount={manualConfig.batteryCount}
-                inverterSize={manualKvaToFlowSize(manualConfig.inverterKva)}
-              />
-            </div>
-          </div>
         </div>
       );
     }
@@ -140,17 +128,6 @@ export default function LeadForm({ mode, result, cfeFile, manualConfig }: Props)
             </p>
           )}
           <p className="mt-3 text-xs text-brand-500">{t.rangeDisclaimer}</p>
-        </div>
-        <div className="mt-4 rounded-lg border border-brand-200 bg-white p-4">
-          <p className="text-sm font-medium text-brand-600">{t.systemDiagramTitle}</p>
-          <div className="mt-2">
-            <SystemFlowDiagram
-              panelCount={range.panelsMax}
-              hasBattery={result.mode !== "sin-respaldo" && range.batteriesMax !== null}
-              batteryCount={range.batteriesMax ?? 0}
-              inverterSize={range.inverterCategory ?? "tbd"}
-            />
-          </div>
         </div>
       </div>
     );

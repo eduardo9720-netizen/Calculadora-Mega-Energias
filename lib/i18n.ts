@@ -72,7 +72,6 @@ export interface Dict {
   inverterTBD: string;
   rangeDisclaimer: string;
   dacMessage: string;
-  systemDiagramTitle: string;
   intakeEquipmentTab: string;
   intakeCfeTab: string;
   intakeManualTab: string;
@@ -167,10 +166,9 @@ export const dict: Record<Lang, Dict> = {
     rangeDisclaimer: "Rangos de referencia. Tu asesor confirmará el detalle exacto.",
     dacMessage:
       "Tu consumo te ubica en tarifa de alto consumo (DAC) con CFE — con un sistema solar tu retorno de inversión es más rápido.",
-    systemDiagramTitle: "Así fluye tu energía",
     intakeEquipmentTab: "Definir consumo",
     intakeCfeTab: "Subir tu recibo de la CFE",
-    intakeManualTab: "Armar sistema solar",
+    intakeManualTab: "Armar tu sistema solar",
     cfeTitle: "Sube tu recibo CFE",
     cfeSub:
       "Súbelo y salta directo a dejarnos tus datos — un asesor calculará tu sistema recomendado a partir de tu consumo real.",
@@ -267,7 +265,6 @@ export const dict: Record<Lang, Dict> = {
     rangeDisclaimer: "Reference ranges only. Your advisor will confirm the exact details.",
     dacMessage:
       "Your usage puts you in CFE's high-consumption tariff (DAC) — a solar system pays for itself faster.",
-    systemDiagramTitle: "How your energy flows",
     intakeEquipmentTab: "Define consumption",
     intakeCfeTab: "Upload your utility bill",
     intakeManualTab: "Build solar system",
