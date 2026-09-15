@@ -17,17 +17,21 @@ export const DEFAULT_KWH_PER_BATTERY = 16;
 export const DEFAULT_AUTONOMY_DAYS = 1;
 export const SYSTEM_VOLTAGE = 48;
 export const INVERTER_SAFETY_FACTOR = 1.25;
-export const MAX_PARALLEL_UNITS_SINGLE_PHASE = 6; // 6 x 15 kVA = 30 kVA monofásico
+export const MAX_PARALLEL_UNITS_SINGLE_PHASE = 6; // max sets of the largest dos-fases pair (30 kVA) stacked together
 export const DAC_UMBRAL_KWH_MES = 2000; // tarifa 1E -> DAC, promedio móvil 12 meses (solo contexto comercial)
 
-// Real Victron MultiPlus-II 48V commercial lineup (continuous @25°C / peak), never invent intermediate sizes.
+// Mega Energías always quotes Victron MultiPlus-II 48V units deployed in
+// pairs, split-phase ("dos fases") — never a single unit. Each tier below is
+// therefore 2x the same real single-unit model's specs; the smallest real
+// deployable configuration is 2x 48/3000 = 6 kVA. Never invent intermediate
+// sizes — these are exactly double the real single-unit nameplate/continuous/peak.
 export const INVERTER_SIZES: InverterSize[] = [
-  { kva: 3, model: "MultiPlus-II 48/3000", continuousW: 2400, peakW: 5500 },
-  { kva: 4.5, model: "MultiPlus-II 48/4500", continuousW: 4000, peakW: 7200 },
-  { kva: 5, model: "MultiPlus-II 48/5000", continuousW: 4000, peakW: 9000 },
-  { kva: 8, model: "MultiPlus-II 48/8000", continuousW: 6400, peakW: 15000 },
-  { kva: 10, model: "MultiPlus-II 48/10000", continuousW: 8000, peakW: 18000 },
-  { kva: 15, model: "MultiPlus-II 48/15000", continuousW: 12000, peakW: 27000 },
+  { kva: 6, model: "2x MultiPlus-II 48/3000 (dos fases)", continuousW: 4800, peakW: 11000 },
+  { kva: 9, model: "2x MultiPlus-II 48/4500 (dos fases)", continuousW: 8000, peakW: 14400 },
+  { kva: 10, model: "2x MultiPlus-II 48/5000 (dos fases)", continuousW: 8000, peakW: 18000 },
+  { kva: 16, model: "2x MultiPlus-II 48/8000 (dos fases)", continuousW: 12800, peakW: 30000 },
+  { kva: 20, model: "2x MultiPlus-II 48/10000 (dos fases)", continuousW: 16000, peakW: 36000 },
+  { kva: 30, model: "2x MultiPlus-II 48/15000 (dos fases)", continuousW: 24000, peakW: 54000 },
 ];
 
 const LARGEST_INVERTER = INVERTER_SIZES[INVERTER_SIZES.length - 1];
@@ -196,7 +200,7 @@ export function toPublicRange(result: CalculationResult): PublicRange {
       inverterCategory = "xlarge";
     } else {
       const kva = result.inverterSize?.kva ?? 0;
-      if (kva <= 5) inverterCategory = "compact";
+      if (kva <= 6) inverterCategory = "compact";
       else if (kva <= 10) inverterCategory = "medium";
       else inverterCategory = "large";
     }
