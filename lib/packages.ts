@@ -75,37 +75,6 @@ export const PACKAGES: EquipmentPackage[] = [
       { catId: "iluminacion", name: "Cargadores varios", brand: "Genérico", spec: "celulares / bocinas", quantity: 1 },
     ],
   },
-  {
-    id: "negocio-chico",
-    title: { es: "Negocio / oficina pequeña", en: "Small business / office" },
-    subtitle: { es: "Cómputo, clima, refrigeración", en: "Computers, AC, fridge" },
-    items: [
-      { catId: "refrig", name: "Refrigerador", brand: "Whirlpool", spec: "18 pies, top freezer", quantity: 1, essential: true },
-      { catId: "clima", name: "Minisplit", brand: "Carrier", spec: "1.5 ton / 18,000 BTU", quantity: 2 },
-      { catId: "entret", name: "Computadora de escritorio", brand: "Genérico", spec: "con monitor", quantity: 3, essential: true },
-      { catId: "entret", name: "Router / módem", brand: "Genérico", spec: "WiFi", quantity: 1, essential: true },
-      { catId: "entret", name: "Impresora", brand: "Genérico", spec: "multifuncional", quantity: 1 },
-      { catId: "cocina", name: "Cafetera", brand: "Oster", spec: "12 tazas", quantity: 1 },
-      { catId: "iluminacion", name: "Foco LED", brand: "Genérico", spec: "alta potencia 15W", quantity: 10 },
-      { catId: "seguridad", name: "Sistema CCTV", brand: "Genérico", spec: "NVR + 4 cámaras", quantity: 1, essential: true },
-    ],
-  },
-  {
-    id: "rancho",
-    title: { es: "Rancho / terreno rural", en: "Ranch / rural land" },
-    subtitle: {
-      es: "Para propiedades sin agua de ciudad: bombeo de pozo propio y riego",
-      en: "For properties without city water: well pumping and irrigation",
-    },
-    items: [
-      { catId: "refrig", name: "Refrigerador", brand: "Mabe", spec: "11 pies, cíclico", quantity: 1, essential: true },
-      { catId: "agua", name: "Bomba de agua", brand: "Evans", spec: "1 HP", quantity: 1, essential: true },
-      { catId: "agua", name: "Hidroneumático / bomba de presión", brand: "Genérico", spec: "1 HP", quantity: 1, essential: true },
-      { catId: "exterior", name: "Bomba de riego / jardín", brand: "Genérico", spec: "estándar", quantity: 1 },
-      { catId: "entret", name: "Router / módem", brand: "Genérico", spec: "WiFi", quantity: 1, essential: true },
-      { catId: "iluminacion", name: "Foco LED", brand: "Genérico", spec: "estándar 9W", quantity: 6 },
-    ],
-  },
 ];
 
 // Add-ons layer extra equipment on top of whatever is already selected
