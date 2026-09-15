@@ -68,6 +68,7 @@ export interface Dict {
   inverterXLarge: string;
   inverterTBD: string;
   rangeDisclaimer: string;
+  dacMessage: string;
   intakeEquipmentTab: string;
   intakeCfeTab: string;
   intakeManualTab: string;
@@ -157,6 +158,8 @@ export const dict: Record<Lang, Dict> = {
     inverterXLarge: "Sistema Victron de múltiples unidades en paralelo",
     inverterTBD: "Modelo de inversor a confirmar por tu asesor",
     rangeDisclaimer: "Rangos de referencia. Tu asesor confirmará el detalle exacto.",
+    dacMessage:
+      "Tu consumo te ubica en tarifa de alto consumo (DAC) con CFE — con un sistema solar tu retorno de inversión es más rápido.",
     intakeEquipmentTab: "Definir consumo",
     intakeCfeTab: "Subir tu recibo de la CFE",
     intakeManualTab: "Armar sistema solar",
@@ -251,6 +254,8 @@ export const dict: Record<Lang, Dict> = {
     inverterXLarge: "Victron multi-unit parallel system",
     inverterTBD: "Inverter model to be confirmed by your advisor",
     rangeDisclaimer: "Reference ranges only. Your advisor will confirm the exact details.",
+    dacMessage:
+      "Your usage puts you in CFE's high-consumption tariff (DAC) — a solar system pays for itself faster.",
     intakeEquipmentTab: "Define consumption",
     intakeCfeTab: "Upload your utility bill",
     intakeManualTab: "Build solar system",

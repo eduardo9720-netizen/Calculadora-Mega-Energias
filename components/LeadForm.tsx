@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import type { CalculationResult, ManualConfig, SystemMode } from "@/lib/types";
-import { toPublicRange } from "@/lib/calculations";
+import { exceedsDacThreshold, toPublicRange } from "@/lib/calculations";
 import { useI18n } from "@/lib/i18n-context";
 
 interface Props {
@@ -122,6 +122,11 @@ export default function LeadForm({ mode, result, cfeFile, manualConfig }: Props)
               <InverterCategoryLabel result={result} />
             </li>
           </ul>
+          {exceedsDacThreshold(result) && (
+            <p className="mt-3 rounded-md bg-accent-50 px-3 py-2 text-xs font-medium text-accent-700">
+              {t.dacMessage}
+            </p>
+          )}
           <p className="mt-3 text-xs text-brand-500">{t.rangeDisclaimer}</p>
         </div>
       </div>

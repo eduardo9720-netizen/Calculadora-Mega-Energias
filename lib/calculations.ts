@@ -5,15 +5,20 @@ import type {
   SystemMode,
 } from "./types";
 
-export const SYSTEM_EFFICIENCY = 0.85;
-export const PEAK_SUN_HOURS = 5.5;
+// kWp = consumo_anual_kWh / (HSP * 365 * PR) — validado contra normales de
+// asoleamiento de San José del Cabo / Los Cabos, BCS.
+export const PERFORMANCE_RATIO = 0.78;
+export const PEAK_SUN_HOURS = 5.8;
 export const WATTS_PER_PANEL = 635;
 export const DOD_LITIO = 0.9;
+export const EFICIENCIA_INVERSOR = 0.96;
+export const EFICIENCIA_BATERIA = 0.98;
 export const DEFAULT_KWH_PER_BATTERY = 16;
 export const DEFAULT_AUTONOMY_DAYS = 1;
 export const SYSTEM_VOLTAGE = 48;
 export const INVERTER_SAFETY_FACTOR = 1.25;
 export const MAX_PARALLEL_UNITS_SINGLE_PHASE = 6; // 6 x 15 kVA = 30 kVA monofásico
+export const DAC_UMBRAL_KWH_MES = 2000; // tarifa 1E -> DAC, promedio móvil 12 meses (solo contexto comercial)
 
 // Real Victron MultiPlus-II 48V commercial lineup (continuous @25°C / peak), never invent intermediate sizes.
 export const INVERTER_SIZES: InverterSize[] = [
@@ -74,7 +79,7 @@ export function calculate(
   mode: SystemMode,
   options: CalculationOptions = {}
 ): CalculationResult {
-  const efficiency = options.efficiency ?? SYSTEM_EFFICIENCY;
+  const performanceRatio = options.efficiency ?? PERFORMANCE_RATIO;
   const peakSunHours = options.peakSunHours ?? PEAK_SUN_HOURS;
   const wattsPerPanel = options.wattsPerPanel ?? WATTS_PER_PANEL;
   const autonomyDays = options.autonomyDays ?? DEFAULT_AUTONOMY_DAYS;
@@ -86,7 +91,7 @@ export function calculate(
   const essentialConnectedW = sumConnectedW(items, true);
 
   // Solar array always sized on total household consumption (savings benefit applies in every mode).
-  const adjustedWhForSolar = dailyWhTotal / efficiency;
+  const adjustedWhForSolar = dailyWhTotal / performanceRatio;
   const solarArrayW = adjustedWhForSolar / peakSunHours;
   const panelCount = Math.ceil(solarArrayW / wattsPerPanel);
 
@@ -115,9 +120,14 @@ export function calculate(
     };
   }
 
+  // Battery bank is sized on real daily consumption (essential-only for
+  // partial backup), never on the solar-derated figure — that derate is a
+  // panel-sizing concept (performance ratio), not a battery-capacity one.
   const batteryBaseWh =
-    mode === "respaldo-parcial" ? dailyWhEssential / efficiency : adjustedWhForSolar;
-  const bankWh = (batteryBaseWh * autonomyDays) / DOD_LITIO;
+    mode === "respaldo-parcial" ? dailyWhEssential : dailyWhTotal;
+  const bankWh =
+    (batteryBaseWh * autonomyDays) /
+    (DOD_LITIO * EFICIENCIA_INVERSOR * EFICIENCIA_BATERIA);
   const bankKWh = bankWh / 1000;
   const batteryCount = Math.ceil(bankKWh / kwhPerBattery);
 
@@ -201,6 +211,12 @@ export function toPublicRange(result: CalculationResult): PublicRange {
     solarKWMin,
     solarKWMax,
   };
+}
+
+// Informational only — never used to cap or "optimize down" the system size.
+export function exceedsDacThreshold(result: CalculationResult): boolean {
+  const monthlyKWh = (result.dailyWhTotal / 1000) * 30.4;
+  return monthlyKWh >= DAC_UMBRAL_KWH_MES;
 }
 
 export function itemKey(item: {
