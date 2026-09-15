@@ -12,15 +12,17 @@ interface I18nContextValue {
 const I18nContext = createContext<I18nContextValue | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>("es");
+  const [lang, setLang] = useState<Lang>("en");
   const [userPicked, setUserPicked] = useState(false);
 
-  // Auto-detect on first load only — a manual toggle (userPicked) always wins.
+  // Defaults to English — Spanish only kicks in when the browser itself is
+  // in Spanish. Auto-detect runs once on first load; a manual toggle
+  // (userPicked) always wins after that.
   useEffect(() => {
     if (userPicked) return;
     const browserLang = navigator.language || navigator.languages?.[0];
-    if (browserLang?.toLowerCase().startsWith("en")) {
-      setLang("en");
+    if (browserLang?.toLowerCase().startsWith("es")) {
+      setLang("es");
     }
   }, [userPicked]);
 
