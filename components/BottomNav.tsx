@@ -81,21 +81,19 @@ export default function BottomNav({
                       <label className="flex items-center gap-1.5">
                         {t.hoursPerDay}
                         <input
-                          type="number"
+                          type="range"
                           min={0}
                           max={24}
                           step={0.5}
                           value={s.hours}
                           onChange={(e) =>
-                            onUpdateItem(s.key, {
-                              hours: Math.min(
-                                24,
-                                Math.max(0, Number(e.target.value) || 0)
-                              ),
-                            })
+                            onUpdateItem(s.key, { hours: Number(e.target.value) })
                           }
-                          className="w-14 rounded-md border border-brand-200 px-1.5 py-1 text-xs focus:border-brand-500 focus:outline-none"
+                          className="h-1.5 w-20 cursor-pointer accent-brand-600"
                         />
+                        <span className="w-9 tabular-nums text-brand-800">
+                          {s.hours}h
+                        </span>
                       </label>
                       <label className="flex items-center gap-1.5">
                         <input
