@@ -47,15 +47,6 @@ export const ADDONS: EquipmentPackage[] = [
       { catId: "agua", name: "Jacuzzi / spa exterior", brand: "Genérico", spec: "bomba + calentador", quantity: 1 },
     ],
   },
-  {
-    id: "camaras",
-    title: { es: "Seguridad", en: "Security" },
-    subtitle: { es: "CCTV + alarma", en: "CCTV + alarm" },
-    items: [
-      { catId: "seguridad", name: "Sistema CCTV", brand: "Genérico", spec: "NVR + 4 cámaras", quantity: 1, essential: true },
-      { catId: "seguridad", name: "Panel de alarma", brand: "Genérico", spec: "estándar", quantity: 1, essential: true },
-    ],
-  },
 ];
 
 // Each entry in equiposIncluidos becomes its own independent row — even
