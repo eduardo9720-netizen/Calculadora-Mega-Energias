@@ -56,7 +56,6 @@ export interface ManualConfig {
   panelCount: number;
   batteryCount: number;
   inverterKva: number;
-  parallelUnits: number;
 }
 
 export interface LeadFormData {

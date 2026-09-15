@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import type { CalculationResult, ManualConfig, SystemMode } from "@/lib/types";
-import { INVERTER_SIZES, toPublicRange } from "@/lib/calculations";
+import { toPublicRange } from "@/lib/calculations";
 import { useI18n } from "@/lib/i18n-context";
 
 interface Props {
@@ -59,8 +59,7 @@ export default function LeadForm({ mode, result, cfeFile, manualConfig }: Props)
         fd.append("intakeMode", "manual");
         fd.append("panelCount", String(manualConfig.panelCount));
         fd.append("batteryCount", String(manualConfig.batteryCount));
-        const inverterKW = manualConfig.inverterKva * manualConfig.parallelUnits;
-        fd.append("inverterKW", String(inverterKW));
+        fd.append("inverterKW", String(manualConfig.inverterKva));
       } else {
         fd.append("intakeMode", "cfe");
         if (cfeFile) fd.append("receipt", cfeFile, cfeFile.name);
@@ -76,8 +75,6 @@ export default function LeadForm({ mode, result, cfeFile, manualConfig }: Props)
 
   if (status === "success") {
     if (manualConfig) {
-      const size = INVERTER_SIZES.find((s) => s.kva === manualConfig.inverterKva);
-      const label = size ? `${size.kva} kVA` : "";
       return (
         <div className="rounded-lg border border-brand-300 bg-brand-50 p-6 text-brand-800">
           <p className="font-semibold">{t.submitSuccessManual}</p>
@@ -90,11 +87,7 @@ export default function LeadForm({ mode, result, cfeFile, manualConfig }: Props)
               {manualConfig.batteryCount > 0 && (
                 <li>{t.manualSummaryBatteries(manualConfig.batteryCount)}</li>
               )}
-              <li>
-                {manualConfig.parallelUnits > 1
-                  ? t.manualSummaryInverterParallel(manualConfig.parallelUnits, label)
-                  : t.manualSummaryInverter(label)}
-              </li>
+              <li>{t.manualSummaryInverter(`${manualConfig.inverterKva} kVA`)}</li>
             </ul>
           </div>
         </div>

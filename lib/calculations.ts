@@ -7,7 +7,7 @@ import type {
 
 export const SYSTEM_EFFICIENCY = 0.85;
 export const PEAK_SUN_HOURS = 5.5;
-export const WATTS_PER_PANEL = 550;
+export const WATTS_PER_PANEL = 635;
 export const DOD_LITIO = 0.9;
 export const DEFAULT_KWH_PER_BATTERY = 16;
 export const DEFAULT_AUTONOMY_DAYS = 1;

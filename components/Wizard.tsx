@@ -30,8 +30,7 @@ type IntakeMode = "equipment" | "cfe" | "manual";
 const DEFAULT_MANUAL_CONFIG: ManualConfig = {
   panelCount: 4,
   batteryCount: 1,
-  inverterKva: 5,
-  parallelUnits: 1,
+  inverterKva: 10,
 };
 
 export default function Wizard({ catalog, loadError }: Props) {

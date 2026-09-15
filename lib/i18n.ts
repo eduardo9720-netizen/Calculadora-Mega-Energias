@@ -85,15 +85,12 @@ export interface Dict {
   manualBatteriesHint: string;
   manualInverter: string;
   manualInverterInfo: string;
-  manualParallelUnits: string;
-  manualThreePhaseNote: string;
   step3TitleManual: string;
   step3SubManual: string;
   manualSummaryIntro: string;
   manualSummaryPanels: (n: number) => string;
   manualSummaryBatteries: (n: number) => string;
   manualSummaryInverter: (label: string) => string;
-  manualSummaryInverterParallel: (n: number, label: string) => string;
   submitSuccessManual: string;
 }
 
@@ -176,23 +173,19 @@ export const dict: Record<Lang, Dict> = {
     manualTitle: "Arma tu sistema solar",
     manualSub:
       "¿Ya sabes lo que necesitas? Elige el tamaño de tu sistema directamente.",
-    manualPanels: "Paneles solares (550 W c/u)",
+    manualPanels: "Paneles solares (635 W c/u)",
     manualBatteries: "Baterías de litio",
     manualBatteriesHint: "16 kWh c/u — 0 si no quieres banco de baterías",
     manualInverter: "Potencia que necesita tu casa",
     manualInverterInfo:
       "Es la capacidad de energía que tu casa necesita en un momento dado, medida en kVA (kilovolt-amperios). Entre más alta, más aparatos puede soportar tu sistema funcionando al mismo tiempo — incluyendo los que consumen más al arrancar, como el aire acondicionado.",
-    manualParallelUnits: "Unidades en paralelo",
-    manualThreePhaseNote:
-      "Más de 6 unidades supera el máximo monofásico — se requiere configuración trifásica.",
     step3TitleManual: "Tu sistema",
     step3SubManual:
       "Confirma tus datos para recibir tu cotización con estos componentes.",
     manualSummaryIntro: "Elegiste:",
     manualSummaryPanels: (n) => `${n} paneles solares`,
     manualSummaryBatteries: (n) => `${n} ${n === 1 ? "batería" : "baterías"} de litio`,
-    manualSummaryInverter: (label) => `Inversor Victron ${label}`,
-    manualSummaryInverterParallel: (n, label) => `${n} × Victron ${label} en paralelo`,
+    manualSummaryInverter: (label) => `Potencia de ${label}`,
     submitSuccessManual:
       "¡Listo! Un asesor confirmará disponibilidad y precio de tu sistema.",
   },
@@ -273,22 +266,18 @@ export const dict: Record<Lang, Dict> = {
       "Done! We received your utility bill. An advisor will review it and contact you soon.",
     manualTitle: "Build your solar system",
     manualSub: "Already know what you need? Choose your system size directly.",
-    manualPanels: "Solar panels (550 W each)",
+    manualPanels: "Solar panels (635 W each)",
     manualBatteries: "Lithium batteries",
     manualBatteriesHint: "16 kWh each — 0 if you don't want a battery bank",
     manualInverter: "Power your home needs",
     manualInverterInfo:
       "This is how much power your home needs at any given moment, measured in kVA (kilovolt-amps). The higher it is, the more appliances your system can run at once — including power-hungry ones like air conditioning at startup.",
-    manualParallelUnits: "Parallel units",
-    manualThreePhaseNote:
-      "More than 6 units exceeds the single-phase maximum — a three-phase configuration is required.",
     step3TitleManual: "Your system",
     step3SubManual: "Confirm your details to receive your quote with these components.",
     manualSummaryIntro: "You chose:",
     manualSummaryPanels: (n) => `${n} solar panels`,
     manualSummaryBatteries: (n) => `${n} lithium ${n === 1 ? "battery" : "batteries"}`,
-    manualSummaryInverter: (label) => `Victron ${label} inverter`,
-    manualSummaryInverterParallel: (n, label) => `${n} × Victron ${label} in parallel`,
+    manualSummaryInverter: (label) => `${label} of power`,
     submitSuccessManual: "Done! An advisor will confirm availability and pricing for your system.",
   },
 };
