@@ -52,6 +52,13 @@ export interface CalculationResult {
   gridTieEstimatedKW: number | null;
 }
 
+export interface ManualConfig {
+  panelCount: number;
+  batteryCount: number;
+  inverterKva: number;
+  parallelUnits: number;
+}
+
 export interface LeadFormData {
   name: string;
   phone: string;

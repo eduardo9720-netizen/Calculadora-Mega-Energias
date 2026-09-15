@@ -100,7 +100,9 @@ export async function createNotionLead(payload: LeadPayload): Promise<void> {
   }
   if (payload.batteryCount !== undefined && payload.batteryCount !== null) {
     properties["Baterías"] = { number: payload.batteryCount };
-    properties["Tipo de batería"] = { select: { name: "Litio" } };
+    if (payload.batteryCount > 0) {
+      properties["Tipo de batería"] = { select: { name: "Litio" } };
+    }
   }
   if (payload.inverterKW !== undefined && payload.inverterKW !== null) {
     properties["Inversor (kW)"] = { number: Math.round(payload.inverterKW * 100) / 100 };

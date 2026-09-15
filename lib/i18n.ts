@@ -70,6 +70,7 @@ export interface Dict {
   rangeDisclaimer: string;
   intakeEquipmentTab: string;
   intakeCfeTab: string;
+  intakeManualTab: string;
   cfeTitle: string;
   cfeSub: string;
   cfeDropHint: string;
@@ -77,11 +78,27 @@ export interface Dict {
   step3TitleCfe: string;
   step3SubCfe: string;
   submitSuccessCfe: string;
+  manualTitle: string;
+  manualSub: string;
+  manualPanels: string;
+  manualBatteries: string;
+  manualBatteriesHint: string;
+  manualInverter: string;
+  manualParallelUnits: string;
+  manualThreePhaseNote: string;
+  step3TitleManual: string;
+  step3SubManual: string;
+  manualSummaryIntro: string;
+  manualSummaryPanels: (n: number) => string;
+  manualSummaryBatteries: (n: number) => string;
+  manualSummaryInverter: (label: string) => string;
+  manualSummaryInverterParallel: (n: number, label: string) => string;
+  submitSuccessManual: string;
 }
 
 export const dict: Record<Lang, Dict> = {
   es: {
-    appName: "Calculadora Mega Energías",
+    appName: "Planificador de Proyecto Solar",
     step1Title: "¿Dónde ocupas energía?",
     step1Sub:
       "Elige los espacios y equipos de tu casa o negocio. Marca \"esencial\" si debe seguir funcionando en un apagón.",
@@ -142,8 +159,9 @@ export const dict: Record<Lang, Dict> = {
     inverterXLarge: "Sistema Victron de múltiples unidades en paralelo",
     inverterTBD: "Modelo de inversor a confirmar por tu asesor",
     rangeDisclaimer: "Rangos de referencia. Tu asesor confirmará el detalle exacto.",
-    intakeEquipmentTab: "Seleccionar equipos",
-    intakeCfeTab: "Subir mi recibo CFE",
+    intakeEquipmentTab: "Definir consumo",
+    intakeCfeTab: "Subir tu recibo de la CFE",
+    intakeManualTab: "Armar sistema solar",
     cfeTitle: "Sube tu recibo CFE",
     cfeSub:
       "Súbelo y salta directo a dejarnos tus datos — un asesor calculará tu sistema recomendado a partir de tu consumo real.",
@@ -154,9 +172,29 @@ export const dict: Record<Lang, Dict> = {
       "Compártenos tus datos y nos contactamos contigo con tu sistema acomodado a tus necesidades y recomendaciones.",
     submitSuccessCfe:
       "¡Listo! Recibimos tu recibo CFE. Un asesor lo revisará y te contactará pronto.",
+    manualTitle: "Arma tu sistema solar",
+    manualSub:
+      "¿Ya sabes lo que necesitas? Elige el tamaño de tu sistema directamente.",
+    manualPanels: "Paneles solares (550 W c/u)",
+    manualBatteries: "Baterías de litio",
+    manualBatteriesHint: "16 kWh c/u — 0 si no quieres banco de baterías",
+    manualInverter: "Inversor Victron MultiPlus-II",
+    manualParallelUnits: "Unidades en paralelo",
+    manualThreePhaseNote:
+      "Más de 6 unidades supera el máximo monofásico — se requiere configuración trifásica.",
+    step3TitleManual: "Tu sistema",
+    step3SubManual:
+      "Confirma tus datos para recibir tu cotización con estos componentes.",
+    manualSummaryIntro: "Elegiste:",
+    manualSummaryPanels: (n) => `${n} paneles solares`,
+    manualSummaryBatteries: (n) => `${n} ${n === 1 ? "batería" : "baterías"} de litio`,
+    manualSummaryInverter: (label) => `Inversor Victron ${label}`,
+    manualSummaryInverterParallel: (n, label) => `${n} × Victron ${label} en paralelo`,
+    submitSuccessManual:
+      "¡Listo! Un asesor confirmará disponibilidad y precio de tu sistema.",
   },
   en: {
-    appName: "Mega Energías Calculator",
+    appName: "Solar Project Planner",
     step1Title: "Where do you use energy?",
     step1Sub:
       "Pick the spaces and equipment in your home or business. Mark \"essential\" if it must keep running during an outage.",
@@ -217,8 +255,9 @@ export const dict: Record<Lang, Dict> = {
     inverterXLarge: "Victron multi-unit parallel system",
     inverterTBD: "Inverter model to be confirmed by your advisor",
     rangeDisclaimer: "Reference ranges only. Your advisor will confirm the exact details.",
-    intakeEquipmentTab: "Select equipment",
-    intakeCfeTab: "Upload my utility bill",
+    intakeEquipmentTab: "Define consumption",
+    intakeCfeTab: "Upload your utility bill",
+    intakeManualTab: "Build solar system",
     cfeTitle: "Upload your utility bill",
     cfeSub:
       "Upload it and skip straight to leaving your details — an advisor will size your recommended system from your actual usage.",
@@ -229,6 +268,23 @@ export const dict: Record<Lang, Dict> = {
       "Share your details and we'll get in touch with your system tailored to your needs and recommendations.",
     submitSuccessCfe:
       "Done! We received your utility bill. An advisor will review it and contact you soon.",
+    manualTitle: "Build your solar system",
+    manualSub: "Already know what you need? Choose your system size directly.",
+    manualPanels: "Solar panels (550 W each)",
+    manualBatteries: "Lithium batteries",
+    manualBatteriesHint: "16 kWh each — 0 if you don't want a battery bank",
+    manualInverter: "Victron MultiPlus-II inverter",
+    manualParallelUnits: "Parallel units",
+    manualThreePhaseNote:
+      "More than 6 units exceeds the single-phase maximum — a three-phase configuration is required.",
+    step3TitleManual: "Your system",
+    step3SubManual: "Confirm your details to receive your quote with these components.",
+    manualSummaryIntro: "You chose:",
+    manualSummaryPanels: (n) => `${n} solar panels`,
+    manualSummaryBatteries: (n) => `${n} lithium ${n === 1 ? "battery" : "batteries"}`,
+    manualSummaryInverter: (label) => `Victron ${label} inverter`,
+    manualSummaryInverterParallel: (n, label) => `${n} × Victron ${label} in parallel`,
+    submitSuccessManual: "Done! An advisor will confirm availability and pricing for your system.",
   },
 };
 

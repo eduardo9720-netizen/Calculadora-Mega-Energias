@@ -1,14 +1,15 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import type { CalculationResult, SystemMode } from "@/lib/types";
-import { toPublicRange } from "@/lib/calculations";
+import type { CalculationResult, ManualConfig, SystemMode } from "@/lib/types";
+import { INVERTER_SIZES, toPublicRange } from "@/lib/calculations";
 import { useI18n } from "@/lib/i18n-context";
 
 interface Props {
   mode: SystemMode;
-  result: CalculationResult | null; // null when the lead came from a CFE receipt upload
-  cfeFile?: File | null;
+  result: CalculationResult | null; // set for the "define consumption" path
+  cfeFile?: File | null; // set for the CFE receipt path
+  manualConfig?: ManualConfig | null; // set for the "build system" path
 }
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -23,7 +24,7 @@ function InverterCategoryLabel({ result }: { result: CalculationResult }) {
   return <>{t.inverterXLarge}</>;
 }
 
-export default function LeadForm({ mode, result, cfeFile }: Props) {
+export default function LeadForm({ mode, result, cfeFile, manualConfig }: Props) {
   const { t, lang } = useI18n();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -54,6 +55,12 @@ export default function LeadForm({ mode, result, cfeFile }: Props) {
           ? (result.inverterSize?.kva ?? 0) * result.inverterParallelUnits
           : result.inverterSize?.kva ?? result.gridTieEstimatedKW ?? null;
         if (inverterKW !== null) fd.append("inverterKW", String(inverterKW));
+      } else if (manualConfig) {
+        fd.append("intakeMode", "manual");
+        fd.append("panelCount", String(manualConfig.panelCount));
+        fd.append("batteryCount", String(manualConfig.batteryCount));
+        const inverterKW = manualConfig.inverterKva * manualConfig.parallelUnits;
+        fd.append("inverterKW", String(inverterKW));
       } else {
         fd.append("intakeMode", "cfe");
         if (cfeFile) fd.append("receipt", cfeFile, cfeFile.name);
@@ -68,6 +75,31 @@ export default function LeadForm({ mode, result, cfeFile }: Props) {
   }
 
   if (status === "success") {
+    if (manualConfig) {
+      const size = INVERTER_SIZES.find((s) => s.kva === manualConfig.inverterKva);
+      const label = size ? `${size.kva} kVA` : "";
+      return (
+        <div className="rounded-lg border border-brand-300 bg-brand-50 p-6 text-brand-800">
+          <p className="font-semibold">{t.submitSuccessManual}</p>
+          <div className="mt-4 rounded-lg border border-brand-200 bg-white p-4">
+            <p className="text-sm font-medium text-brand-600">
+              {t.manualSummaryIntro}
+            </p>
+            <ul className="mt-2 space-y-1 text-brand-950">
+              <li>{t.manualSummaryPanels(manualConfig.panelCount)}</li>
+              {manualConfig.batteryCount > 0 && (
+                <li>{t.manualSummaryBatteries(manualConfig.batteryCount)}</li>
+              )}
+              <li>
+                {manualConfig.parallelUnits > 1
+                  ? t.manualSummaryInverterParallel(manualConfig.parallelUnits, label)
+                  : t.manualSummaryInverter(label)}
+              </li>
+            </ul>
+          </div>
+        </div>
+      );
+    }
     if (!result) {
       return (
         <div className="rounded-lg border border-brand-300 bg-brand-50 p-6 text-brand-800">

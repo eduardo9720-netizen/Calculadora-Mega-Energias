@@ -1,7 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { CatalogItem, SelectedItem, SystemMode } from "@/lib/types";
+import type {
+  CatalogItem,
+  ManualConfig,
+  SelectedItem,
+  SystemMode,
+} from "@/lib/types";
 import { calculate, itemKey, DEFAULT_AUTONOMY_DAYS, DEFAULT_KWH_PER_BATTERY } from "@/lib/calculations";
 import { resolvePackageItems, type EquipmentPackage } from "@/lib/packages";
 import { useI18n } from "@/lib/i18n-context";
@@ -12,6 +17,7 @@ import SystemTypeSelector from "./SystemTypeSelector";
 import ResultsView from "./ResultsView";
 import BottomNav from "./BottomNav";
 import CfeUpload from "./CfeUpload";
+import ManualBuilder from "./ManualBuilder";
 import LeadForm from "./LeadForm";
 
 interface Props {
@@ -19,7 +25,14 @@ interface Props {
   loadError: string | null;
 }
 
-type IntakeMode = "equipment" | "cfe";
+type IntakeMode = "equipment" | "cfe" | "manual";
+
+const DEFAULT_MANUAL_CONFIG: ManualConfig = {
+  panelCount: 4,
+  batteryCount: 1,
+  inverterKva: 5,
+  parallelUnits: 1,
+};
 
 export default function Wizard({ catalog, loadError }: Props) {
   const { t } = useI18n();
@@ -27,6 +40,7 @@ export default function Wizard({ catalog, loadError }: Props) {
   const [intakeMode, setIntakeMode] = useState<IntakeMode>("equipment");
   const [selected, setSelected] = useState<Record<string, SelectedItem>>({});
   const [cfeFile, setCfeFile] = useState<File | null>(null);
+  const [manualConfig, setManualConfig] = useState<ManualConfig>(DEFAULT_MANUAL_CONFIG);
   const [mode, setMode] = useState<SystemMode | null>(null);
   const [kwhPerBattery] = useState(DEFAULT_KWH_PER_BATTERY);
   const [autonomyDays] = useState(DEFAULT_AUTONOMY_DAYS);
@@ -107,13 +121,18 @@ export default function Wizard({ catalog, loadError }: Props) {
     setStep(1);
     setSelected({});
     setCfeFile(null);
+    setManualConfig(DEFAULT_MANUAL_CONFIG);
     setMode(null);
     setActivePackageId(null);
     setActiveAddOnIds(new Set());
   }
 
   const step1Valid =
-    intakeMode === "equipment" ? selectedList.length > 0 : cfeFile !== null;
+    intakeMode === "equipment"
+      ? selectedList.length > 0
+      : intakeMode === "cfe"
+      ? cfeFile !== null
+      : manualConfig.panelCount > 0;
 
   const canGoNext = step === 1 ? step1Valid : step === 2 ? !!mode : true;
   const nextLabel = step === 2 ? t.seeResults : t.next;
@@ -126,6 +145,12 @@ export default function Wizard({ catalog, loadError }: Props) {
   function handleBack() {
     setStep((s) => (s > 1 ? ((s - 1) as 1 | 2) : s));
   }
+
+  const intakeTabs: { id: IntakeMode; label: string }[] = [
+    { id: "equipment", label: t.intakeEquipmentTab },
+    { id: "cfe", label: t.intakeCfeTab },
+    { id: "manual", label: t.intakeManualTab },
+  ];
 
   return (
     <main className="mx-auto min-h-screen max-w-4xl px-4 pb-24 pt-8 sm:px-6 sm:pt-12">
@@ -151,33 +176,25 @@ export default function Wizard({ catalog, loadError }: Props) {
       <div className="mt-8">
         {step === 1 && (
           <>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setIntakeMode("equipment")}
-                className={`rounded-md border px-3 py-1.5 text-sm font-medium transition ${
-                  intakeMode === "equipment"
-                    ? "border-brand-600 bg-brand-600 text-white"
-                    : "border-brand-200 bg-white text-brand-700 hover:border-brand-300"
-                }`}
-              >
-                {t.intakeEquipmentTab}
-              </button>
-              <button
-                type="button"
-                onClick={() => setIntakeMode("cfe")}
-                className={`rounded-md border px-3 py-1.5 text-sm font-medium transition ${
-                  intakeMode === "cfe"
-                    ? "border-brand-600 bg-brand-600 text-white"
-                    : "border-brand-200 bg-white text-brand-700 hover:border-brand-300"
-                }`}
-              >
-                {t.intakeCfeTab}
-              </button>
+            <div className="grid grid-cols-3 gap-2">
+              {intakeTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setIntakeMode(tab.id)}
+                  className={`flex min-h-20 items-center justify-center rounded-lg border px-3 py-4 text-center text-sm font-medium transition ${
+                    intakeMode === tab.id
+                      ? "border-brand-600 bg-brand-600 text-white"
+                      : "border-brand-200 bg-white text-brand-700 hover:border-brand-300"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
 
             <div className="mt-6">
-              {intakeMode === "equipment" ? (
+              {intakeMode === "equipment" && (
                 <EquipmentSelector
                   catalog={catalog}
                   selected={selected}
@@ -187,8 +204,12 @@ export default function Wizard({ catalog, loadError }: Props) {
                   onApplyPackage={applyPackage}
                   onToggleAddOn={toggleAddOn}
                 />
-              ) : (
+              )}
+              {intakeMode === "cfe" && (
                 <CfeUpload file={cfeFile} onFileChange={setCfeFile} />
+              )}
+              {intakeMode === "manual" && (
+                <ManualBuilder config={manualConfig} onChange={setManualConfig} />
               )}
             </div>
           </>
@@ -205,6 +226,17 @@ export default function Wizard({ catalog, loadError }: Props) {
             <p className="mt-2 max-w-2xl text-brand-700">{t.step3SubCfe}</p>
             <div className="mt-8">
               <LeadForm mode={mode} result={null} cfeFile={cfeFile} />
+            </div>
+          </div>
+        )}
+        {step === 3 && intakeMode === "manual" && mode && (
+          <div>
+            <h1 className="text-2xl font-bold text-brand-950 sm:text-3xl">
+              {t.step3TitleManual}
+            </h1>
+            <p className="mt-2 max-w-2xl text-brand-700">{t.step3SubManual}</p>
+            <div className="mt-8">
+              <LeadForm mode={mode} result={null} manualConfig={manualConfig} />
             </div>
           </div>
         )}

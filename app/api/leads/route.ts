@@ -21,7 +21,11 @@ export async function POST(req: NextRequest) {
   const email = str("email");
   const lang = form.get("lang") === "en" ? "en" : "es";
   const mode = str("mode");
-  const intakeMode = str("intakeMode") === "cfe" ? "cfe" : "equipment";
+  const intakeModeRaw = str("intakeMode");
+  const intakeMode =
+    intakeModeRaw === "cfe" || intakeModeRaw === "manual"
+      ? intakeModeRaw
+      : "equipment";
   const notes = str("notes") || undefined;
 
   if (!name || !phone || !email) {
@@ -53,6 +57,10 @@ export async function POST(req: NextRequest) {
     batteryCount = batteryRaw ? Number(batteryRaw) : null;
     const inverterRaw = str("inverterKW");
     inverterKW = inverterRaw ? Number(inverterRaw) : null;
+  } else if (intakeMode === "manual") {
+    panelCount = Number(str("panelCount")) || 0;
+    batteryCount = Number(str("batteryCount")) || 0;
+    inverterKW = Number(str("inverterKW")) || null;
   }
 
   let fileUploadId: string | undefined;
