@@ -148,7 +148,7 @@ export default function EquipmentSelector({
         </div>
       </div>
 
-      <ul className="mt-4 grid grid-cols-1 gap-2 pb-20 sm:grid-cols-2">
+      <ul className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
         {filtered.map((item) => {
           const key = itemKey(item);
           const sel = selected[key];

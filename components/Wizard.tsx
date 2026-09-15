@@ -10,7 +10,7 @@ import ProgressSteps from "./ProgressSteps";
 import EquipmentSelector from "./EquipmentSelector";
 import SystemTypeSelector from "./SystemTypeSelector";
 import ResultsView from "./ResultsView";
-import SelectedItemsBar from "./SelectedItemsBar";
+import BottomNav from "./BottomNav";
 import CfeUpload from "./CfeUpload";
 import LeadForm from "./LeadForm";
 
@@ -103,11 +103,32 @@ export default function Wizard({ catalog, loadError }: Props) {
     });
   }
 
+  function startOver() {
+    setStep(1);
+    setSelected({});
+    setCfeFile(null);
+    setMode(null);
+    setActivePackageId(null);
+    setActiveAddOnIds(new Set());
+  }
+
   const step1Valid =
     intakeMode === "equipment" ? selectedList.length > 0 : cfeFile !== null;
 
+  const canGoNext = step === 1 ? step1Valid : step === 2 ? !!mode : true;
+  const nextLabel = step === 2 ? t.seeResults : t.next;
+
+  function handleNext() {
+    if (step === 1) setStep(2);
+    else if (step === 2) setStep(3);
+  }
+
+  function handleBack() {
+    setStep((s) => (s > 1 ? ((s - 1) as 1 | 2) : s));
+  }
+
   return (
-    <main className="mx-auto min-h-screen max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
+    <main className="mx-auto min-h-screen max-w-4xl px-4 pb-24 pt-8 sm:px-6 sm:pt-12">
       <div className="flex items-center justify-between gap-4">
         <div>
           <h2 className="text-sm font-semibold uppercase tracking-wide text-brand-600">
@@ -189,57 +210,17 @@ export default function Wizard({ catalog, loadError }: Props) {
         )}
       </div>
 
-      <div className="mt-8 flex items-center justify-between border-t border-brand-100 pt-6">
-        <button
-          type="button"
-          onClick={() => setStep((s) => (s > 1 ? ((s - 1) as 1 | 2) : s))}
-          disabled={step === 1}
-          className="rounded-lg px-4 py-2 text-sm font-medium text-brand-700 transition hover:bg-brand-50 disabled:opacity-0"
-        >
-          ← {t.back}
-        </button>
-
-        {step === 1 && (
-          <button
-            type="button"
-            onClick={() => setStep(2)}
-            disabled={!step1Valid}
-            className="rounded-lg bg-brand-600 px-5 py-2.5 font-semibold text-white transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            {t.next} →
-          </button>
-        )}
-        {step === 2 && (
-          <button
-            type="button"
-            onClick={() => setStep(3)}
-            disabled={!mode}
-            className="rounded-lg bg-brand-600 px-5 py-2.5 font-semibold text-white transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            {t.seeResults} →
-          </button>
-        )}
-        {step === 3 && (
-          <button
-            type="button"
-            onClick={() => {
-              setStep(1);
-              setSelected({});
-              setCfeFile(null);
-              setMode(null);
-              setActivePackageId(null);
-              setActiveAddOnIds(new Set());
-            }}
-            className="rounded-lg px-4 py-2 text-sm font-medium text-brand-700 transition hover:bg-brand-50"
-          >
-            {t.startOver}
-          </button>
-        )}
-      </div>
-
-      {step === 1 && intakeMode === "equipment" && (
-        <SelectedItemsBar items={selectedList} onRemove={removeItem} onUpdate={updateItem} />
-      )}
+      <BottomNav
+        step={step}
+        canGoNext={canGoNext}
+        nextLabel={nextLabel}
+        onBack={handleBack}
+        onNext={handleNext}
+        onStartOver={startOver}
+        summaryItems={step === 1 && intakeMode === "equipment" ? selectedList : null}
+        onRemoveItem={removeItem}
+        onUpdateItem={updateItem}
+      />
     </main>
   );
 }

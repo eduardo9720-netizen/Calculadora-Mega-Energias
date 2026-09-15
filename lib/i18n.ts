@@ -81,9 +81,9 @@ export interface Dict {
 export const dict: Record<Lang, Dict> = {
   es: {
     appName: "Calculadora Mega Energías",
-    step1Title: "Selecciona tus equipos",
+    step1Title: "¿Dónde ocupas energía?",
     step1Sub:
-      "Marca los equipos de tu casa, ajusta cantidad y horas de uso al día. Marca \"esencial\" si debe seguir funcionando en un apagón.",
+      "Elige los espacios y equipos de tu casa o negocio. Marca \"esencial\" si debe seguir funcionando en un apagón.",
     searchPlaceholder: "Buscar equipo...",
     allCategories: "Todas las categorías",
     quantity: "Cantidad",
@@ -155,9 +155,9 @@ export const dict: Record<Lang, Dict> = {
   },
   en: {
     appName: "Mega Energías Calculator",
-    step1Title: "Select your equipment",
+    step1Title: "Where do you use energy?",
     step1Sub:
-      "Check the equipment in your home, adjust quantity and hours of use per day. Mark \"essential\" if it must keep running during an outage.",
+      "Pick the spaces and equipment in your home or business. Mark \"essential\" if it must keep running during an outage.",
     searchPlaceholder: "Search equipment...",
     allCategories: "All categories",
     quantity: "Quantity",
