@@ -2,7 +2,7 @@ export type Lang = "es" | "en";
 
 export const CATEGORY_LABELS: Record<string, { es: string; en: string }> = {
   agua: { es: "Agua / Bombeo", en: "Water / Pumping" },
-  clima: { es: "Clima", en: "Climate" },
+  clima: { es: "Aire acondicionado", en: "Air conditioning" },
   cocina: { es: "Cocina", en: "Kitchen" },
   entret: { es: "Entretenimiento", en: "Entertainment" },
   exterior: { es: "Exterior", en: "Outdoor" },
