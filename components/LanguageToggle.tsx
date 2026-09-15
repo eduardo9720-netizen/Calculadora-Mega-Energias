@@ -5,7 +5,7 @@ import { useI18n } from "@/lib/i18n-context";
 export default function LanguageToggle() {
   const { lang, setLang } = useI18n();
   return (
-    <div className="inline-flex rounded-full border border-brand-200 bg-white p-1 text-sm font-medium shadow-sm">
+    <div className="inline-flex rounded-full border border-brand-200 bg-white p-1 text-sm font-medium">
       <button
         type="button"
         onClick={() => setLang("es")}

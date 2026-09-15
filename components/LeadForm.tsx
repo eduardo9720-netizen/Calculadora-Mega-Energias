@@ -92,7 +92,7 @@ export default function LeadForm({ result }: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-xl border border-brand-100 bg-white p-5 shadow-sm"
+      className="rounded-xl border border-brand-100 bg-white p-5"
     >
       <h2 className="text-lg font-semibold text-brand-950">
         {t.leadFormTitle}
@@ -147,7 +147,7 @@ export default function LeadForm({ result }: Props) {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="mt-4 w-full rounded-lg bg-brand-600 px-4 py-2.5 font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:opacity-60 sm:w-auto"
+        className="mt-4 w-full rounded-lg bg-brand-600 px-4 py-2.5 font-semibold text-white transition hover:bg-brand-700 disabled:opacity-60 sm:w-auto"
       >
         {status === "submitting" ? t.submitting : t.submit}
       </button>

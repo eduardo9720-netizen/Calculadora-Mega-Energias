@@ -13,7 +13,6 @@ export interface PackageItemRef {
 
 export interface EquipmentPackage {
   id: string;
-  emoji: string;
   title: { es: string; en: string };
   subtitle: { es: string; en: string };
   items: PackageItemRef[];
@@ -24,7 +23,6 @@ export interface EquipmentPackage {
 export const PACKAGES: EquipmentPackage[] = [
   {
     id: "depa-chico",
-    emoji: "🏢",
     title: { es: "Depa / casa chica", en: "Apartment / small home" },
     subtitle: { es: "1-2 recámaras, bien equipado", en: "1-2 bedrooms, fully equipped" },
     items: [
@@ -46,7 +44,6 @@ export const PACKAGES: EquipmentPackage[] = [
   },
   {
     id: "casa-3-recamaras",
-    emoji: "🏠",
     title: { es: "Casa 3 recámaras", en: "3-bedroom house" },
     subtitle: { es: "3 aires, 2 tele, 1 refrigerador", en: "3 AC units, 2 TVs, 1 fridge" },
     items: [
@@ -62,7 +59,6 @@ export const PACKAGES: EquipmentPackage[] = [
   },
   {
     id: "casa-grande",
-    emoji: "🏡",
     title: { es: "Casa grande", en: "Large house" },
     subtitle: { es: "4+ recámaras, cocina equipada", en: "4+ bedrooms, full kitchen" },
     items: [
@@ -81,7 +77,6 @@ export const PACKAGES: EquipmentPackage[] = [
   },
   {
     id: "negocio-chico",
-    emoji: "🏪",
     title: { es: "Negocio / oficina pequeña", en: "Small business / office" },
     subtitle: { es: "Cómputo, clima, refrigeración", en: "Computers, AC, fridge" },
     items: [
@@ -97,7 +92,6 @@ export const PACKAGES: EquipmentPackage[] = [
   },
   {
     id: "rancho",
-    emoji: "🌾",
     title: { es: "Rancho / exterior", en: "Ranch / rural" },
     subtitle: { es: "Bombeo de agua y riego", en: "Water pumping & irrigation" },
     items: [
@@ -116,7 +110,6 @@ export const PACKAGES: EquipmentPackage[] = [
 export const ADDONS: EquipmentPackage[] = [
   {
     id: "alberca",
-    emoji: "🏊",
     title: { es: "Alberca", en: "Pool" },
     subtitle: { es: "Bomba + calentador", en: "Pump + heater" },
     items: [
@@ -126,7 +119,6 @@ export const ADDONS: EquipmentPackage[] = [
   },
   {
     id: "auto-electrico",
-    emoji: "🚗",
     title: { es: "Auto eléctrico", en: "Electric car" },
     subtitle: { es: "Cargador Nivel 2", en: "Level 2 charger" },
     items: [
@@ -135,7 +127,6 @@ export const ADDONS: EquipmentPackage[] = [
   },
   {
     id: "jacuzzi",
-    emoji: "💦",
     title: { es: "Jacuzzi / spa", en: "Jacuzzi / spa" },
     subtitle: { es: "Bomba + calentador", en: "Pump + heater" },
     items: [
@@ -144,7 +135,6 @@ export const ADDONS: EquipmentPackage[] = [
   },
   {
     id: "starlink",
-    emoji: "🛰️",
     title: { es: "Internet satelital", en: "Satellite internet" },
     subtitle: { es: "Starlink", en: "Starlink" },
     items: [
@@ -153,7 +143,6 @@ export const ADDONS: EquipmentPackage[] = [
   },
   {
     id: "camaras",
-    emoji: "📹",
     title: { es: "Seguridad", en: "Security" },
     subtitle: { es: "CCTV + alarma", en: "CCTV + alarm" },
     items: [

@@ -60,12 +60,12 @@ export default function EquipmentSelector({
       </h1>
       <p className="mt-2 max-w-2xl text-brand-700">{t.step1Sub}</p>
 
-      <div className="mt-6">
+      <div className="mt-8">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-brand-600">
           {t.packagesTitle}
         </h2>
         <p className="mt-1 text-sm text-brand-600">{t.packagesHint}</p>
-        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
           {PACKAGES.map((pkg) => {
             const isActive = activePackageId === pkg.id;
             return (
@@ -73,14 +73,13 @@ export default function EquipmentSelector({
                 key={pkg.id}
                 type="button"
                 onClick={() => onApplyPackage(pkg)}
-                className={`rounded-xl border p-3 text-left shadow-sm transition ${
+                className={`rounded-lg border p-3 text-left transition ${
                   isActive
-                    ? "border-brand-500 bg-brand-50 ring-2 ring-brand-300"
+                    ? "border-brand-600 bg-white"
                     : "border-brand-100 bg-white hover:border-brand-300"
                 }`}
               >
-                <div className="text-xl">{pkg.emoji}</div>
-                <div className="mt-1 text-sm font-semibold text-brand-950">
+                <div className="text-sm font-semibold text-brand-950">
                   {pkg.title[lang]}
                 </div>
                 <div className="mt-0.5 text-xs text-brand-500">
@@ -102,13 +101,12 @@ export default function EquipmentSelector({
                 key={addon.id}
                 type="button"
                 onClick={() => onToggleAddOn(addon)}
-                className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition ${
+                className={`rounded-md border px-3 py-1.5 text-sm font-medium transition ${
                   isActive
-                    ? "bg-brand-600 text-white"
-                    : "bg-white text-brand-700 border border-brand-200 hover:bg-brand-50"
+                    ? "border-brand-600 bg-brand-600 text-white"
+                    : "border-brand-200 bg-white text-brand-700 hover:border-brand-300"
                 }`}
               >
-                <span>{addon.emoji}</span>
                 {addon.title[lang]}
               </button>
             );
@@ -123,16 +121,16 @@ export default function EquipmentSelector({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={t.searchPlaceholder}
-          className="w-full rounded-lg border border-brand-200 bg-white px-4 py-2.5 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-200 sm:max-w-xs"
+          className="w-full rounded-md border border-brand-200 bg-white px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none sm:max-w-xs"
         />
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
             onClick={() => setCategory("all")}
-            className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
+            className={`rounded-md border px-3 py-1.5 text-sm font-medium transition ${
               category === "all"
-                ? "bg-brand-600 text-white"
-                : "bg-white text-brand-700 border border-brand-200 hover:bg-brand-50"
+                ? "border-brand-600 bg-brand-600 text-white"
+                : "border-brand-200 bg-white text-brand-700 hover:border-brand-300"
             }`}
           >
             {t.allCategories}
@@ -142,10 +140,10 @@ export default function EquipmentSelector({
               key={c}
               type="button"
               onClick={() => setCategory(c)}
-              className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
+              className={`rounded-md border px-3 py-1.5 text-sm font-medium transition ${
                 category === c
-                  ? "bg-brand-600 text-white"
-                  : "bg-white text-brand-700 border border-brand-200 hover:bg-brand-50"
+                  ? "border-brand-600 bg-brand-600 text-white"
+                  : "border-brand-200 bg-white text-brand-700 hover:border-brand-300"
               }`}
             >
               {CATEGORY_LABELS[c]?.[lang] ?? c}
@@ -158,7 +156,7 @@ export default function EquipmentSelector({
         {selectedCount} {t.selectedCount}
       </p>
 
-      <ul className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
         {filtered.map((item) => {
           const key = itemKey(item);
           const sel = selected[key];
@@ -168,10 +166,8 @@ export default function EquipmentSelector({
           return (
             <li
               key={key}
-              className={`rounded-xl border bg-white p-4 shadow-sm transition ${
-                isSelected
-                  ? "border-brand-400 ring-1 ring-brand-300"
-                  : "border-brand-100"
+              className={`rounded-lg border bg-white p-4 transition ${
+                isSelected ? "border-brand-600" : "border-brand-100"
               }`}
             >
               <label className="flex cursor-pointer items-start gap-3">
@@ -236,7 +232,7 @@ export default function EquipmentSelector({
                       onChange={(e) =>
                         onUpdate(key, { essential: e.target.checked })
                       }
-                      className="h-4 w-4 rounded border-brand-300 text-sun-500 focus:ring-sun-500"
+                      className="h-4 w-4 rounded border-brand-300 text-brand-600 focus:ring-brand-500"
                     />
                     <span title={t.essentialHint}>{t.essential}</span>
                   </label>

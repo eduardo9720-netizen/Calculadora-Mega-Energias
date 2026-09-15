@@ -141,7 +141,7 @@ export default function Wizard({ catalog, loadError }: Props) {
             type="button"
             onClick={() => setStep(2)}
             disabled={selectedList.length === 0}
-            className="rounded-lg bg-brand-600 px-5 py-2.5 font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-lg bg-brand-600 px-5 py-2.5 font-semibold text-white transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-40"
           >
             {t.next} →
           </button>
@@ -151,7 +151,7 @@ export default function Wizard({ catalog, loadError }: Props) {
             type="button"
             onClick={() => setStep(3)}
             disabled={!mode}
-            className="rounded-lg bg-brand-600 px-5 py-2.5 font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-lg bg-brand-600 px-5 py-2.5 font-semibold text-white transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-40"
           >
             {t.seeResults} →
           </button>
