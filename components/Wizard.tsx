@@ -161,7 +161,6 @@ export default function Wizard({ catalog, loadError }: Props) {
                   catalog={catalog}
                   selected={selected}
                   onToggle={toggleItem}
-                  onUpdate={updateItem}
                   activePackageId={activePackageId}
                   activeAddOnIds={activeAddOnIds}
                   onApplyPackage={applyPackage}
@@ -239,7 +238,7 @@ export default function Wizard({ catalog, loadError }: Props) {
       </div>
 
       {step === 1 && intakeMode === "equipment" && (
-        <SelectedItemsBar items={selectedList} onRemove={removeItem} />
+        <SelectedItemsBar items={selectedList} onRemove={removeItem} onUpdate={updateItem} />
       )}
     </main>
   );

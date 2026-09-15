@@ -11,7 +11,6 @@ interface Props {
   catalog: CatalogItem[];
   selected: Record<string, SelectedItem>;
   onToggle: (item: CatalogItem) => void;
-  onUpdate: (key: string, patch: Partial<SelectedItem>) => void;
   activePackageId: string | null;
   activeAddOnIds: Set<string>;
   onApplyPackage: (pkg: EquipmentPackage) => void;
@@ -22,7 +21,6 @@ export default function EquipmentSelector({
   catalog,
   selected,
   onToggle,
-  onUpdate,
   activePackageId,
   activeAddOnIds,
   onApplyPackage,
@@ -183,55 +181,6 @@ export default function EquipmentSelector({
                   </div>
                 </div>
               </label>
-
-              {isSelected && (
-                <div className="mt-3 flex flex-wrap items-center gap-4 border-t border-brand-100 pt-3">
-                  <label className="flex items-center gap-2 text-sm text-brand-700">
-                    {t.quantity}
-                    <input
-                      type="number"
-                      min={1}
-                      value={sel.quantity}
-                      onChange={(e) =>
-                        onUpdate(key, {
-                          quantity: Math.max(1, Number(e.target.value) || 1),
-                        })
-                      }
-                      className="w-16 rounded-md border border-brand-200 px-2 py-1 text-sm focus:border-brand-500 focus:outline-none"
-                    />
-                  </label>
-                  <label className="flex items-center gap-2 text-sm text-brand-700">
-                    {t.hoursPerDay}
-                    <input
-                      type="number"
-                      min={0}
-                      max={24}
-                      step={0.5}
-                      value={sel.hours}
-                      onChange={(e) =>
-                        onUpdate(key, {
-                          hours: Math.min(
-                            24,
-                            Math.max(0, Number(e.target.value) || 0)
-                          ),
-                        })
-                      }
-                      className="w-16 rounded-md border border-brand-200 px-2 py-1 text-sm focus:border-brand-500 focus:outline-none"
-                    />
-                  </label>
-                  <label className="flex items-center gap-2 text-sm text-brand-700">
-                    <input
-                      type="checkbox"
-                      checked={sel.essential}
-                      onChange={(e) =>
-                        onUpdate(key, { essential: e.target.checked })
-                      }
-                      className="h-4 w-4 rounded border-brand-300 text-brand-600 focus:ring-brand-500"
-                    />
-                    <span title={t.essentialHint}>{t.essential}</span>
-                  </label>
-                </div>
-              )}
             </li>
           );
         })}
