@@ -3,6 +3,7 @@
 import { INVERTER_SIZES, MAX_PARALLEL_UNITS_SINGLE_PHASE } from "@/lib/calculations";
 import { useI18n } from "@/lib/i18n-context";
 import type { ManualConfig } from "@/lib/types";
+import InfoTooltip from "./InfoTooltip";
 
 interface Props {
   config: ManualConfig;
@@ -58,6 +59,7 @@ export default function ManualBuilder({ config, onChange }: Props) {
       <div className="mt-6">
         <div className="text-sm font-medium text-brand-700">
           {t.manualInverter}
+          <InfoTooltip text={t.manualInverterInfo} />
         </div>
         <div className="mt-2 flex flex-wrap gap-2">
           {INVERTER_SIZES.map((size) => {

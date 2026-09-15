@@ -84,6 +84,7 @@ export interface Dict {
   manualBatteries: string;
   manualBatteriesHint: string;
   manualInverter: string;
+  manualInverterInfo: string;
   manualParallelUnits: string;
   manualThreePhaseNote: string;
   step3TitleManual: string;
@@ -178,7 +179,9 @@ export const dict: Record<Lang, Dict> = {
     manualPanels: "Paneles solares (550 W c/u)",
     manualBatteries: "Baterías de litio",
     manualBatteriesHint: "16 kWh c/u — 0 si no quieres banco de baterías",
-    manualInverter: "Inversor Victron MultiPlus-II",
+    manualInverter: "Potencia que necesita tu casa",
+    manualInverterInfo:
+      "Es la capacidad de energía que tu casa necesita en un momento dado, medida en kVA (kilovolt-amperios). Entre más alta, más aparatos puede soportar tu sistema funcionando al mismo tiempo — incluyendo los que consumen más al arrancar, como el aire acondicionado.",
     manualParallelUnits: "Unidades en paralelo",
     manualThreePhaseNote:
       "Más de 6 unidades supera el máximo monofásico — se requiere configuración trifásica.",
@@ -273,7 +276,9 @@ export const dict: Record<Lang, Dict> = {
     manualPanels: "Solar panels (550 W each)",
     manualBatteries: "Lithium batteries",
     manualBatteriesHint: "16 kWh each — 0 if you don't want a battery bank",
-    manualInverter: "Victron MultiPlus-II inverter",
+    manualInverter: "Power your home needs",
+    manualInverterInfo:
+      "This is how much power your home needs at any given moment, measured in kVA (kilovolt-amps). The higher it is, the more appliances your system can run at once — including power-hungry ones like air conditioning at startup.",
     manualParallelUnits: "Parallel units",
     manualThreePhaseNote:
       "More than 6 units exceeds the single-phase maximum — a three-phase configuration is required.",
