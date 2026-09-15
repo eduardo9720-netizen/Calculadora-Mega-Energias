@@ -107,9 +107,6 @@
   { "catId": "personal", "name": "Afeitadora eléctrica", "nameEn": "Electric shaver", "brand": "Genérico", "spec": "recargable", "specEn": "rechargeable", "watts": 15, "hours": 0.1 },
   { "catId": "personal", "name": "Robot aspiradora", "nameEn": "Robot vacuum", "brand": "Genérico", "spec": "con base de carga", "specEn": "with charging dock", "watts": 40, "hours": 1 },
 
-  { "catId": "iluminacion", "name": "Foco LED", "nameEn": "LED bulb", "brand": "Genérico", "spec": "estándar 9W", "specEn": "standard 9W", "watts": 9, "hours": 5 },
-  { "catId": "iluminacion", "name": "Foco LED", "nameEn": "LED bulb", "brand": "Genérico", "spec": "alta potencia 15W", "specEn": "high power 15W", "watts": 15, "hours": 5 },
-  { "catId": "iluminacion", "name": "Tira LED", "nameEn": "LED strip", "brand": "Genérico", "spec": "por metro", "specEn": "per meter", "watts": 5, "hours": 5 },
   { "catId": "iluminacion", "name": "Plancha de ropa", "nameEn": "Clothes iron", "brand": "Genérico", "spec": "estándar", "specEn": "standard", "watts": 1200, "hours": 0.5 },
   { "catId": "iluminacion", "name": "Aspiradora", "nameEn": "Vacuum cleaner", "brand": "Genérico", "spec": "estándar", "specEn": "standard", "watts": 1000, "hours": 0.5 },
   { "catId": "iluminacion", "name": "Cargadores varios", "nameEn": "Misc chargers", "brand": "Genérico", "spec": "celulares / bocinas", "specEn": "phones / speakers", "watts": 20, "hours": 6 }
