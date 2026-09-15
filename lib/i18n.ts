@@ -267,7 +267,7 @@ export const dict: Record<Lang, Dict> = {
       "Your usage puts you in CFE's high-consumption tariff (DAC) — a solar system pays for itself faster.",
     intakeEquipmentTab: "Define consumption",
     intakeCfeTab: "Upload your utility bill",
-    intakeManualTab: "Build solar system",
+    intakeManualTab: "Build your solar system",
     cfeTitle: "Upload your utility bill",
     cfeSub:
       "Upload it and skip straight to leaving your details — an advisor will size your recommended system from your actual usage.",
