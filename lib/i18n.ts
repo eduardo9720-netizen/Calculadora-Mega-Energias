@@ -6,7 +6,7 @@ export const CATEGORY_LABELS: Record<string, { es: string; en: string }> = {
   cocina: { es: "Cocina", en: "Kitchen" },
   entret: { es: "Entretenimiento", en: "Entertainment" },
   exterior: { es: "Exterior", en: "Outdoor" },
-  iluminacion: { es: "Iluminación", en: "Lighting" },
+  iluminacion: { es: "Electrodomésticos", en: "Electric appliances" },
   lavado: { es: "Lavado", en: "Laundry" },
   personal: { es: "Cuidado personal", en: "Personal care" },
   refrig: { es: "Refrigeración", en: "Refrigeration" },
