@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
   const name = typeof b.name === "string" ? b.name.trim() : "";
   const phone = typeof b.phone === "string" ? b.phone.trim() : "";
-  const email = typeof b.email === "string" ? b.email.trim() : undefined;
+  const email = typeof b.email === "string" ? b.email.trim() : "";
   const lang = b.lang === "en" ? "en" : "es";
   const mode = b.mode;
   const dailyWhTotal = typeof b.dailyWhTotal === "number" ? b.dailyWhTotal : 0;
@@ -23,9 +23,9 @@ export async function POST(req: NextRequest) {
   const inverterKW = typeof b.inverterKW === "number" ? b.inverterKW : null;
   const notes = typeof b.notes === "string" ? b.notes : undefined;
 
-  if (!name || !phone) {
+  if (!name || !phone || !email) {
     return NextResponse.json(
-      { error: "Nombre y teléfono son requeridos." },
+      { error: "Nombre, teléfono y correo son requeridos." },
       { status: 400 }
     );
   }
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     await createNotionLead({
       name,
       phone,
-      email: email || undefined,
+      email,
       lang,
       mode: mode as
         | "off-grid"

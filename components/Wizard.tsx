@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { CatalogItem, SelectedItem, SystemMode } from "@/lib/types";
 import { calculate, itemKey, DEFAULT_AUTONOMY_DAYS, DEFAULT_KWH_PER_BATTERY } from "@/lib/calculations";
+import { resolvePackageItems, type EquipmentPackage } from "@/lib/packages";
 import { useI18n } from "@/lib/i18n-context";
 import LanguageToggle from "./LanguageToggle";
 import ProgressSteps from "./ProgressSteps";
@@ -22,6 +23,8 @@ export default function Wizard({ catalog, loadError }: Props) {
   const [mode, setMode] = useState<SystemMode | null>(null);
   const [kwhPerBattery, setKwhPerBattery] = useState(DEFAULT_KWH_PER_BATTERY);
   const [autonomyDays, setAutonomyDays] = useState(DEFAULT_AUTONOMY_DAYS);
+  const [activePackageId, setActivePackageId] = useState<string | null>(null);
+  const [activeAddOnIds, setActiveAddOnIds] = useState<Set<string>>(new Set());
 
   const selectedList = useMemo(() => Object.values(selected), [selected]);
 
@@ -56,6 +59,35 @@ export default function Wizard({ catalog, loadError }: Props) {
     });
   }
 
+  function applyPackage(pkg: EquipmentPackage) {
+    const items = resolvePackageItems(pkg, catalog);
+    const next: Record<string, SelectedItem> = {};
+    for (const s of items) next[s.key] = s;
+    setSelected(next);
+    setActivePackageId(pkg.id);
+    setActiveAddOnIds(new Set());
+  }
+
+  function toggleAddOn(addon: EquipmentPackage) {
+    const items = resolvePackageItems(addon, catalog);
+    setSelected((prev) => {
+      const next = { ...prev };
+      const isActive = activeAddOnIds.has(addon.id);
+      if (isActive) {
+        for (const s of items) delete next[s.key];
+      } else {
+        for (const s of items) next[s.key] = s;
+      }
+      return next;
+    });
+    setActiveAddOnIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(addon.id)) next.delete(addon.id);
+      else next.add(addon.id);
+      return next;
+    });
+  }
+
   return (
     <main className="mx-auto min-h-screen max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
       <div className="flex items-center justify-between gap-4">
@@ -84,18 +116,14 @@ export default function Wizard({ catalog, loadError }: Props) {
             selected={selected}
             onToggle={toggleItem}
             onUpdate={updateItem}
+            activePackageId={activePackageId}
+            activeAddOnIds={activeAddOnIds}
+            onApplyPackage={applyPackage}
+            onToggleAddOn={toggleAddOn}
           />
         )}
         {step === 2 && <SystemTypeSelector mode={mode} onSelect={setMode} />}
-        {step === 3 && result && (
-          <ResultsView
-            result={result}
-            kwhPerBattery={kwhPerBattery}
-            autonomyDays={autonomyDays}
-            onKwhPerBatteryChange={setKwhPerBattery}
-            onAutonomyDaysChange={setAutonomyDays}
-          />
-        )}
+        {step === 3 && result && <ResultsView result={result} />}
       </div>
 
       <div className="mt-8 flex items-center justify-between border-t border-brand-100 pt-6">
@@ -135,6 +163,8 @@ export default function Wizard({ catalog, loadError }: Props) {
               setStep(1);
               setSelected({});
               setMode(null);
+              setActivePackageId(null);
+              setActiveAddOnIds(new Set());
             }}
             className="rounded-lg px-4 py-2 text-sm font-medium text-brand-700 transition hover:bg-brand-50"
           >

@@ -5,12 +5,17 @@ import type { CatalogItem, SelectedItem } from "@/lib/types";
 import { itemKey } from "@/lib/calculations";
 import { CATEGORY_LABELS } from "@/lib/i18n";
 import { useI18n } from "@/lib/i18n-context";
+import { PACKAGES, ADDONS, type EquipmentPackage } from "@/lib/packages";
 
 interface Props {
   catalog: CatalogItem[];
   selected: Record<string, SelectedItem>;
   onToggle: (item: CatalogItem) => void;
   onUpdate: (key: string, patch: Partial<SelectedItem>) => void;
+  activePackageId: string | null;
+  activeAddOnIds: Set<string>;
+  onApplyPackage: (pkg: EquipmentPackage) => void;
+  onToggleAddOn: (addon: EquipmentPackage) => void;
 }
 
 export default function EquipmentSelector({
@@ -18,6 +23,10 @@ export default function EquipmentSelector({
   selected,
   onToggle,
   onUpdate,
+  activePackageId,
+  activeAddOnIds,
+  onApplyPackage,
+  onToggleAddOn,
 }: Props) {
   const { t, lang } = useI18n();
   const [category, setCategory] = useState<string>("all");
@@ -51,7 +60,64 @@ export default function EquipmentSelector({
       </h1>
       <p className="mt-2 max-w-2xl text-brand-700">{t.step1Sub}</p>
 
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+      <div className="mt-6">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-brand-600">
+          {t.packagesTitle}
+        </h2>
+        <p className="mt-1 text-sm text-brand-600">{t.packagesHint}</p>
+        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {PACKAGES.map((pkg) => {
+            const isActive = activePackageId === pkg.id;
+            return (
+              <button
+                key={pkg.id}
+                type="button"
+                onClick={() => onApplyPackage(pkg)}
+                className={`rounded-xl border p-3 text-left shadow-sm transition ${
+                  isActive
+                    ? "border-brand-500 bg-brand-50 ring-2 ring-brand-300"
+                    : "border-brand-100 bg-white hover:border-brand-300"
+                }`}
+              >
+                <div className="text-xl">{pkg.emoji}</div>
+                <div className="mt-1 text-sm font-semibold text-brand-950">
+                  {pkg.title[lang]}
+                </div>
+                <div className="mt-0.5 text-xs text-brand-500">
+                  {pkg.subtitle[lang]}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <h2 className="mt-5 text-sm font-semibold uppercase tracking-wide text-brand-600">
+          {t.addonsTitle}
+        </h2>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {ADDONS.map((addon) => {
+            const isActive = activeAddOnIds.has(addon.id);
+            return (
+              <button
+                key={addon.id}
+                type="button"
+                onClick={() => onToggleAddOn(addon)}
+                className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition ${
+                  isActive
+                    ? "bg-brand-600 text-white"
+                    : "bg-white text-brand-700 border border-brand-200 hover:bg-brand-50"
+                }`}
+              >
+                <span>{addon.emoji}</span>
+                {addon.title[lang]}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <p className="mt-6 text-sm text-brand-500">{t.searchHint}</p>
+      <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center">
         <input
           type="text"
           value={query}

@@ -150,6 +150,59 @@ export function calculate(
   };
 }
 
+export type InverterCategory = "compact" | "medium" | "large" | "xlarge";
+
+export interface PublicRange {
+  panelsMin: number;
+  panelsMax: number;
+  batteriesMin: number | null;
+  batteriesMax: number | null;
+  inverterCategory: InverterCategory | null; // null only for mode "sin-respaldo" (model TBD)
+  solarKWMin: number;
+  solarKWMax: number;
+}
+
+// Deliberately fuzzed for the public-facing thank-you screen — the exact
+// numbers only go to Notion for the advisor to review before contacting the lead.
+export function toPublicRange(result: CalculationResult): PublicRange {
+  const panelsMin = Math.max(1, result.panelCount - 1);
+  const panelsMax = result.panelCount + 1;
+  const solarKW = result.mode === "sin-respaldo"
+    ? result.gridTieEstimatedKW ?? 0
+    : result.solarArrayW / 1000;
+  const solarKWMin = Math.max(0.5, Math.round(solarKW * 0.85 * 10) / 10);
+  const solarKWMax = Math.round(solarKW * 1.15 * 10) / 10;
+
+  let batteriesMin: number | null = null;
+  let batteriesMax: number | null = null;
+  if (result.batteryCount !== null) {
+    batteriesMin = Math.max(1, result.batteryCount - 1);
+    batteriesMax = result.batteryCount + 1;
+  }
+
+  let inverterCategory: InverterCategory | null = null;
+  if (result.mode !== "sin-respaldo") {
+    if (result.inverterParallelUnits) {
+      inverterCategory = "xlarge";
+    } else {
+      const kva = result.inverterSize?.kva ?? 0;
+      if (kva <= 5) inverterCategory = "compact";
+      else if (kva <= 10) inverterCategory = "medium";
+      else inverterCategory = "large";
+    }
+  }
+
+  return {
+    panelsMin,
+    panelsMax,
+    batteriesMin,
+    batteriesMax,
+    inverterCategory,
+    solarKWMin,
+    solarKWMax,
+  };
+}
+
 export function itemKey(item: {
   catId: string;
   name: string;

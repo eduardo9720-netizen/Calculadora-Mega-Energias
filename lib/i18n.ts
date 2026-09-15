@@ -38,18 +38,7 @@ export interface Dict {
   modeSinRespaldoDesc: string;
   seeResults: string;
   step3Title: string;
-  dailyConsumption: string;
-  solarArray: string;
-  panels: string;
-  batteryBank: string;
-  batteries: string;
-  inverter: string;
-  noBattery: string;
-  gridTieNote: string;
-  parallelUnitsNote: (n: number) => string;
-  threePhaseNote: string;
-  kwhPerBatteryLabel: string;
-  autonomyDaysLabel: string;
+  step3Sub: string;
   leadFormTitle: string;
   leadFormSub: string;
   name: string;
@@ -62,8 +51,22 @@ export interface Dict {
   submitError: string;
   startOver: string;
   editSelection: string;
-  litioNote: string;
   perDay: string;
+  packagesTitle: string;
+  packagesHint: string;
+  addonsTitle: string;
+  searchHint: string;
+  rangeIntro: string;
+  rangePanels: (min: number, max: number) => string;
+  rangeBatteries: (min: number, max: number) => string;
+  rangeNoBattery: string;
+  rangeSolarKW: (min: number, max: number) => string;
+  inverterCompact: string;
+  inverterMedium: string;
+  inverterLarge: string;
+  inverterXLarge: string;
+  inverterTBD: string;
+  rangeDisclaimer: string;
 }
 
 export const dict: Record<Lang, Dict> = {
@@ -95,28 +98,16 @@ export const dict: Record<Lang, Dict> = {
     modeSinRespaldoTitle: "On-grid sin respaldo",
     modeSinRespaldoDesc:
       "Solo paneles + inversor interactivo con la red, sin batería. En un apagón el sistema se apaga por seguridad (anti-isla).",
-    seeResults: "Ver resultados",
-    step3Title: "Tu sistema recomendado",
-    dailyConsumption: "Consumo diario",
-    solarArray: "Arreglo solar",
-    panels: "paneles",
-    batteryBank: "Banco de baterías",
-    batteries: "baterías",
-    inverter: "Inversor",
-    noBattery: "Este modo no incluye banco de baterías.",
-    gridTieNote:
-      "Modelo de inversor a confirmar por tu asesor Mega Energías (interconexión a red, sin batería).",
-    parallelUnitsNote: (n: number) =>
-      `${n} × MultiPlus-II 15kVA en paralelo`,
-    threePhaseNote:
-      "Supera el máximo monofásico (6 unidades / 30 kVA) — se requiere configuración trifásica. Un asesor confirmará el arreglo final.",
-    kwhPerBatteryLabel: "kWh por batería",
-    autonomyDaysLabel: "Días de autonomía",
+    seeResults: "Ver mi cotización",
+    step3Title: "¡Ya tenemos un estimado para ti!",
+    step3Sub:
+      "Calculamos un estimado de lo que necesita tu casa o negocio. Compártenos tus datos y nos contactamos contigo con tu sistema acomodado a tus necesidades y recomendaciones.",
     leadFormTitle: "Recibe tu cotización",
-    leadFormSub: "Un asesor de Mega Energías te contactará con los precios.",
+    leadFormSub:
+      "Si quieres ver lo que necesitas, compártenos tu correo y nos ponemos en contacto contigo.",
     name: "Nombre",
     phone: "Teléfono",
-    email: "Correo (opcional)",
+    email: "Correo",
     notes: "Notas (opcional)",
     submit: "Enviar",
     submitting: "Enviando...",
@@ -124,8 +115,22 @@ export const dict: Record<Lang, Dict> = {
     submitError: "No se pudo enviar. Intenta de nuevo o contáctanos directo.",
     startOver: "Empezar de nuevo",
     editSelection: "Editar selección",
-    litioNote: "Batería estándar Mega Energías: litio LiFePO4, 48V, DoD 90%.",
     perDay: "/día",
+    packagesTitle: "Empieza con un paquete",
+    packagesHint: "Elige el que más se parezca a tu casa o negocio y ajusta lo que necesites.",
+    addonsTitle: "Extras",
+    searchHint: "¿No encuentras algo? Búscalo abajo.",
+    rangeIntro: "Como referencia, tu sistema estimado:",
+    rangePanels: (min, max) => `${min}–${max} paneles solares`,
+    rangeBatteries: (min, max) => `${min}–${max} baterías de litio`,
+    rangeNoBattery: "Este modo no incluye banco de baterías.",
+    rangeSolarKW: (min, max) => `Arreglo solar de ${min}–${max} kW`,
+    inverterCompact: "Inversor Victron línea compacta",
+    inverterMedium: "Inversor Victron línea media",
+    inverterLarge: "Inversor Victron línea alta capacidad",
+    inverterXLarge: "Sistema Victron de múltiples unidades en paralelo",
+    inverterTBD: "Modelo de inversor a confirmar por tu asesor",
+    rangeDisclaimer: "Rangos de referencia. Tu asesor confirmará el detalle exacto.",
   },
   en: {
     appName: "Mega Energías Calculator",
@@ -155,28 +160,16 @@ export const dict: Record<Lang, Dict> = {
     modeSinRespaldoTitle: "Grid-tied, no backup",
     modeSinRespaldoDesc:
       "Panels + grid-interactive inverter only, no battery. During an outage the system shuts off for safety (anti-islanding).",
-    seeResults: "See results",
-    step3Title: "Your recommended system",
-    dailyConsumption: "Daily consumption",
-    solarArray: "Solar array",
-    panels: "panels",
-    batteryBank: "Battery bank",
-    batteries: "batteries",
-    inverter: "Inverter",
-    noBattery: "This mode does not include a battery bank.",
-    gridTieNote:
-      "Inverter model to be confirmed by your Mega Energías advisor (grid interconnection, no battery).",
-    parallelUnitsNote: (n: number) =>
-      `${n} × MultiPlus-II 15kVA in parallel`,
-    threePhaseNote:
-      "Exceeds the single-phase maximum (6 units / 30 kVA) — a three-phase configuration is required. An advisor will confirm the final setup.",
-    kwhPerBatteryLabel: "kWh per battery",
-    autonomyDaysLabel: "Autonomy days",
+    seeResults: "See my quote",
+    step3Title: "We've put together an estimate for you!",
+    step3Sub:
+      "We calculated an estimate of what your home or business needs. Share your details and we'll get in touch with your system tailored to your needs and recommendations.",
     leadFormTitle: "Get your quote",
-    leadFormSub: "A Mega Energías advisor will contact you with pricing.",
+    leadFormSub:
+      "Want to see what you need? Share your email and we'll get in touch.",
     name: "Name",
     phone: "Phone",
-    email: "Email (optional)",
+    email: "Email",
     notes: "Notes (optional)",
     submit: "Submit",
     submitting: "Sending...",
@@ -184,8 +177,22 @@ export const dict: Record<Lang, Dict> = {
     submitError: "Couldn't send. Try again or contact us directly.",
     startOver: "Start over",
     editSelection: "Edit selection",
-    litioNote: "Mega Energías standard battery: LiFePO4 lithium, 48V, 90% DoD.",
     perDay: "/day",
+    packagesTitle: "Start with a package",
+    packagesHint: "Pick the one closest to your home or business and adjust as needed.",
+    addonsTitle: "Extras",
+    searchHint: "Can't find something? Search below.",
+    rangeIntro: "As a reference, your estimated system:",
+    rangePanels: (min, max) => `${min}–${max} solar panels`,
+    rangeBatteries: (min, max) => `${min}–${max} lithium batteries`,
+    rangeNoBattery: "This mode does not include a battery bank.",
+    rangeSolarKW: (min, max) => `${min}–${max} kW solar array`,
+    inverterCompact: "Victron compact-line inverter",
+    inverterMedium: "Victron mid-line inverter",
+    inverterLarge: "Victron high-capacity inverter",
+    inverterXLarge: "Victron multi-unit parallel system",
+    inverterTBD: "Inverter model to be confirmed by your advisor",
+    rangeDisclaimer: "Reference ranges only. Your advisor will confirm the exact details.",
   },
 };
 

@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import type { CalculationResult } from "@/lib/types";
+import { toPublicRange } from "@/lib/calculations";
 import { useI18n } from "@/lib/i18n-context";
 
 interface Props {
@@ -9,6 +10,16 @@ interface Props {
 }
 
 type Status = "idle" | "submitting" | "success" | "error";
+
+function InverterCategoryLabel({ result }: { result: CalculationResult }) {
+  const { t } = useI18n();
+  const range = toPublicRange(result);
+  if (range.inverterCategory === null) return <>{t.inverterTBD}</>;
+  if (range.inverterCategory === "compact") return <>{t.inverterCompact}</>;
+  if (range.inverterCategory === "medium") return <>{t.inverterMedium}</>;
+  if (range.inverterCategory === "large") return <>{t.inverterLarge}</>;
+  return <>{t.inverterXLarge}</>;
+}
 
 export default function LeadForm({ result }: Props) {
   const { t, lang } = useI18n();
@@ -32,7 +43,7 @@ export default function LeadForm({ result }: Props) {
         body: JSON.stringify({
           name,
           phone,
-          email: email || undefined,
+          email,
           notes: notes || undefined,
           lang,
           mode: result.mode,
@@ -50,9 +61,30 @@ export default function LeadForm({ result }: Props) {
   }
 
   if (status === "success") {
+    const range = toPublicRange(result);
     return (
-      <div className="rounded-xl border border-brand-300 bg-brand-50 p-5 text-brand-800">
-        {t.submitSuccess}
+      <div className="rounded-xl border border-brand-300 bg-brand-50 p-6 text-brand-800">
+        <p className="font-semibold">{t.submitSuccess}</p>
+        <div className="mt-4 rounded-lg border border-brand-200 bg-white p-4">
+          <p className="text-sm font-medium text-brand-600">{t.rangeIntro}</p>
+          <ul className="mt-2 space-y-1 text-brand-950">
+            <li>
+              {result.mode === "sin-respaldo"
+                ? t.rangeSolarKW(range.solarKWMin, range.solarKWMax)
+                : t.rangePanels(range.panelsMin, range.panelsMax)}
+            </li>
+            {result.mode !== "sin-respaldo" &&
+              range.batteriesMin !== null &&
+              range.batteriesMax !== null && (
+                <li>{t.rangeBatteries(range.batteriesMin, range.batteriesMax)}</li>
+              )}
+            {result.mode === "sin-respaldo" && <li>{t.rangeNoBattery}</li>}
+            <li>
+              <InverterCategoryLabel result={result} />
+            </li>
+          </ul>
+          <p className="mt-3 text-xs text-brand-500">{t.rangeDisclaimer}</p>
+        </div>
       </div>
     );
   }
@@ -90,6 +122,7 @@ export default function LeadForm({ result }: Props) {
         <label className="text-sm text-brand-700 sm:col-span-2">
           {t.email}
           <input
+            required
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
